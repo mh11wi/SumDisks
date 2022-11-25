@@ -3,6 +3,7 @@
   "author": "Madeleine Hill <mh11wi@outlook.com> (https://mh11wi.github.io)",
   "version": "0.1.0",
   "private": true,
+  "homepage": "http://mh11wi.github.io/SumDisks",
   "dependencies": {
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",
@@ -14,7 +15,9 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --watchAll=false",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build"
   },
   "eslintConfig": {
     "extends": [
@@ -36,6 +39,7 @@
   },
   "devDependencies": {
     "@svgr/webpack": "^6.5.1",
+    "gh-pages": "^4.0.0",
     "react-scripts": "5.0.1"
   },
   "overrides": {
