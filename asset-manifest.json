@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "/SumDisks/static/css/main.caf5056e.css",
+    "main.js": "/SumDisks/static/js/main.3d05b5bd.js",
+    "index.html": "/SumDisks/index.html",
+    "main.caf5056e.css.map": "/SumDisks/static/css/main.caf5056e.css.map",
+    "main.3d05b5bd.js.map": "/SumDisks/static/js/main.3d05b5bd.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.caf5056e.css",
+    "static/js/main.3d05b5bd.js"
+  ]
+}
