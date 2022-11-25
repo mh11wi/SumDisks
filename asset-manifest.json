@@ -1,13 +1,14 @@
 {
   "files": {
-    "main.css": "/SumDisks/static/css/main.caf5056e.css",
-    "main.js": "/SumDisks/static/js/main.3d05b5bd.js",
+    "main.css": "/SumDisks/static/css/main.871ed945.css",
+    "main.js": "/SumDisks/static/js/main.c433424c.js",
+    "static/media/OpenDyslexic-Regular.woff2": "/SumDisks/static/media/OpenDyslexic-Regular.30ddd7034b273ecf2b6a.woff2",
     "index.html": "/SumDisks/index.html",
-    "main.caf5056e.css.map": "/SumDisks/static/css/main.caf5056e.css.map",
-    "main.3d05b5bd.js.map": "/SumDisks/static/js/main.3d05b5bd.js.map"
+    "main.871ed945.css.map": "/SumDisks/static/css/main.871ed945.css.map",
+    "main.c433424c.js.map": "/SumDisks/static/js/main.c433424c.js.map"
   },
   "entrypoints": [
-    "static/css/main.caf5056e.css",
-    "static/js/main.3d05b5bd.js"
+    "static/css/main.871ed945.css",
+    "static/js/main.c433424c.js"
   ]
 }
