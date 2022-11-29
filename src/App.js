@@ -1,12 +1,23 @@
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import pink from '@mui/material/colors/pink';
-import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
-import Toolbar from '@mui/material/Toolbar';
-import Typography from '@mui/material/Typography';
-import Button from '@mui/material/Button';
 import ReactDisks from 'react-disks';
+import MenuBar from './components/MenuBar';
+import '@fontsource/roboto/300.css';
+import '@fontsource/roboto/400.css';
+import '@fontsource/roboto/500.css';
+import '@fontsource/roboto/700.css';
 import './App.css';
+
+const theme = createTheme({
+  palette: {
+    primary: {
+      main: pink[500],
+      light: pink[100],
+      dark: pink[800]
+    }
+  },
+});
 
 function App() {
   const disksText = [
@@ -19,30 +30,13 @@ function App() {
     [-11, -22, -33, -44, -55, -66]
   ];
   
-  const theme = createTheme({
-    palette: {
-      primary: {
-        main: pink[500],
-        light: pink[100],
-        dark: pink[800]
-      }
-    },
-  });
-  
   return (
     <div className="App">
       <ThemeProvider theme={theme}>
         <Box sx={{ flexGrow: 1 }}>
-          <AppBar position="relative">
-            <Toolbar>
-              <Typography variant="h6" component="h1" sx={{ flexGrow: 1 }}>
-                Sum Disks
-              </Typography>
-              <Button href="https://mh11wi.github.io" color="inherit">Home</Button>
-            </Toolbar>
-          </AppBar>
+          <MenuBar />
         </Box>
-        <Box role="main" sx={{ flexGrow: 1, height: "calc(100% - 64px)"}}>
+        <Box role="main" sx={{ flexGrow: 1, height: "calc(100% - 4rem)"}}>
           <ReactDisks 
             disksText={disksText}
             theme={theme.palette.primary}
