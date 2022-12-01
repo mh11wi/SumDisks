@@ -41,7 +41,7 @@ function generateNonNegtiveColumn(length) {
   }
   tmp.push(0);
   tmp.push(1);
-  tmp.sort((a,b) => a > b);
+  tmp.sort((a,b) => a - b);
   
   const column = [];
   for (let i=0; i < tmp.length - 1; i++) {
