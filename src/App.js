@@ -120,7 +120,7 @@ function newGame(numberOfDisks, numbersPerDisk, includeNegatives) {
 
 function App() {
   const [disksText, setDisksText] = useState(null);
-  const [numberOfDisks, setNumberOfDisks] = useState(5);
+  const [numberOfDisks, setNumberOfDisks] = useState(4);
   const [numbersPerDisk, setNumbersPerDisk] = useState(4);
   const [includeNegatives, setIncludeNegatives] = useState(false);
   const [hasWon, setHasWon] = useState(false);
@@ -134,11 +134,19 @@ function App() {
     setTimeout(() => setHasWon(isSolved(rotatedDisksText)), 500);
   }
   
+  const handleClickNewGame = () => {
+    setDisksText(newGame(numberOfDisks, numbersPerDisk, includeNegatives));
+    setHasWon(false);
+  }
+  
   return (
     <div className="App">
       <ThemeProvider theme={theme}>
         <Box sx={{ flexGrow: 1 }}>
-          <MenuBar />
+          <MenuBar 
+            handleClickNewGame={handleClickNewGame}
+            hasWon={hasWon}
+          />
         </Box>
         <Box role="main" sx={{ flexGrow: 1, height: "calc(100% - 4rem)"}}>
           <ReactDisks 
