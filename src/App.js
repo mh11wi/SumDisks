@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import pink from '@mui/material/colors/pink';
 import Box from '@mui/material/Box';
@@ -145,6 +145,12 @@ function App() {
         <Box sx={{ flexGrow: 1 }}>
           <MenuBar 
             handleClickNewGame={handleClickNewGame}
+            numberOfDisks={numberOfDisks}
+            setNumberOfDisks={setNumberOfDisks}
+            numbersPerDisk={numbersPerDisk}
+            setNumbersPerDisk={setNumbersPerDisk}
+            includeNegatives={includeNegatives}
+            setIncludeNegatives={setIncludeNegatives}
             hasWon={hasWon}
           />
         </Box>
