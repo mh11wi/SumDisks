@@ -1,7 +1,7 @@
 {
   "name": "sum-disks",
   "author": "Madeleine Hill <mh11wi@outlook.com> (https://mh11wi.github.io)",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "private": true,
   "homepage": "http://mh11wi.github.io/SumDisks",
   "dependencies": {

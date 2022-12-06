@@ -43,6 +43,7 @@ const MenuBar = (props) => {
         <HelpDialog
           open={helpOpen}
           onClose={handleCloseHelp}
+          sum={props.sum}
         />
         <IconButton aria-label="Settings" onClick={handleClickSettings} color="inherit">
           <Settings />
@@ -50,6 +51,8 @@ const MenuBar = (props) => {
         <SettingsDialog
           open={settingsOpen}
           onClose={handleCloseSettings}
+          sum={props.sum}
+          setSum={props.setSum}
           numberOfDisks={props.numberOfDisks}
           setNumberOfDisks={props.setNumberOfDisks}
           numbersPerDisk={props.numbersPerDisk}

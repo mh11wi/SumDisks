@@ -29,7 +29,9 @@ const HelpDialog = (props) => {
         <DialogContentText component="div">
           <List>
             <ListItem disablePadding>
-              <ListItemText primary="Rotate the disks so every column of numbers add up to 100." />
+              <ListItemText>
+                Rotate the disks so every column of numbers add up to { props.sum }.
+              </ListItemText>
             </ListItem>
             <ListItem disablePadding>
               <ListItemText primary="You can rotate a disk by clicking on it, and then clicking either the clockwise or counterclockwise arrow." />

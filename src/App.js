@@ -11,8 +11,6 @@ import '@fontsource/roboto/500.css';
 import '@fontsource/roboto/700.css';
 import './App.css';
 
-const SUM = 100;
-
 const theme = createTheme({
   palette: {
     primary: {
@@ -35,7 +33,7 @@ function getSum(array) {
   return array.reduce((partialSum, a) => partialSum + a, 0);
 }
 
-function generateNonNegtiveColumn(length) {
+function generateNonNegtiveColumn(sum, length) {
   const tmp = [];
   for (let i=0; i < length - 1; i++) {
     tmp.push(Math.random());
@@ -46,38 +44,43 @@ function generateNonNegtiveColumn(length) {
   
   const column = [];
   for (let i=0; i < tmp.length - 1; i++) {
-    column.push(Math.floor(SUM * (tmp[i + 1] - tmp[i])));
+    column.push(Math.floor(sum * (tmp[i + 1] - tmp[i])));
   }
   
   const currentSum = getSum(column);
   const index = getRandomInt(0, length);
-  column[index] += SUM - currentSum;
+  column[index] += sum - currentSum;
   
   return column;
 }
 
-function generateIntegerColumn(length) {
+function generateIntegerColumn(sum, length) {
   const column = [];
   for (let i=0; i < length - 1; i++) {
-    column.push(getRandomInt(-SUM + 1, SUM))
+    column.push(getRandomInt(-sum + 1, sum))
   }
+  
   const currentSum = getSum(column);
-  column.push(SUM - currentSum);
+  if (Math.abs(sum - currentSum) >= sum) {
+    return generateIntegerColumn(sum, length);
+  }  
+    
+  column.push(sum - currentSum);
   return column;
 }
 
-function generateNumberColumn(length, includeNegatives) {
+function generateNumberColumn(sum, length, includeNegatives) {
   if (includeNegatives) {
-    return generateIntegerColumn(length);
+    return generateIntegerColumn(sum, length);
   }
   
-  return generateNonNegtiveColumn(length);
+  return generateNonNegtiveColumn(sum, length);
 }
 
-function generateNumberMatrix(numberOfDisks, numbersPerDisk, includeNegatives) {
+function generateNumberMatrix(sum, numberOfDisks, numbersPerDisk, includeNegatives) {
   const numberMatrix = [];
   for (let i=0; i < numbersPerDisk; i++) {
-    const numberColumn = generateNumberColumn(numberOfDisks, includeNegatives);
+    const numberColumn = generateNumberColumn(sum, numberOfDisks, includeNegatives);
     numberMatrix.push(numberColumn);
   }
   return numberMatrix;
@@ -102,18 +105,18 @@ function randomRotate(matrix) {
   });
 }
 
-function isSolved(answer) {
+function isSolved(sum, answer) {
   const numberMatrix = transpose(answer);
-  return numberMatrix.every((numberColumn) => getSum(numberColumn) === SUM);
+  return numberMatrix.every((numberColumn) => getSum(numberColumn) === sum);
 }
 
-function newGame(numberOfDisks, numbersPerDisk, includeNegatives) {
-  const numberMatrix = generateNumberMatrix(numberOfDisks, numbersPerDisk, includeNegatives);
+function newGame(sum, numberOfDisks, numbersPerDisk, includeNegatives) {
+  const numberMatrix = generateNumberMatrix(sum, numberOfDisks, numbersPerDisk, includeNegatives);
   const disksText = transpose(numberMatrix);
   randomRotate(disksText);
   
-  if (isSolved(disksText)) {
-    return newGame(numberOfDisks, numbersPerDisk, includeNegatives);
+  if (isSolved(sum, disksText)) {
+    return newGame(sum, numberOfDisks, numbersPerDisk, includeNegatives);
   }
   
   return disksText;
@@ -121,15 +124,16 @@ function newGame(numberOfDisks, numbersPerDisk, includeNegatives) {
 
 function App() {
   const [disksText, setDisksText] = useState(null);
+  const [sum, setSum] = useState(100);
   const [numberOfDisks, setNumberOfDisks] = useState(4);
   const [numbersPerDisk, setNumbersPerDisk] = useState(4);
   const [includeNegatives, setIncludeNegatives] = useState(false);
   const [hasWon, setHasWon] = useState(false);
   
   useEffect(() => {
-    setDisksText(newGame(numberOfDisks, numbersPerDisk, includeNegatives));
+    setDisksText(newGame(sum, numberOfDisks, numbersPerDisk, includeNegatives));
     setHasWon(false);
-  }, [numberOfDisks, numbersPerDisk, includeNegatives]);
+  }, [sum, numberOfDisks, numbersPerDisk, includeNegatives]);
   
   useEffect(() => {
     if (hasWon) {
@@ -141,11 +145,11 @@ function App() {
   }, [hasWon]);
   
   const onRotate = (rotatedDisksText) => {
-    setTimeout(() => setHasWon(isSolved(rotatedDisksText)), 500);
+    setTimeout(() => setHasWon(isSolved(sum, rotatedDisksText)), 500);
   }
   
   const handleClickNewGame = () => {
-    setDisksText(newGame(numberOfDisks, numbersPerDisk, includeNegatives));
+    setDisksText(newGame(sum, numberOfDisks, numbersPerDisk, includeNegatives));
     setHasWon(false);
   }
   
@@ -155,6 +159,8 @@ function App() {
         <Box sx={{ flexGrow: 1 }}>
           <MenuBar 
             handleClickNewGame={handleClickNewGame}
+            sum={sum}
+            setSum={setSum}
             numberOfDisks={numberOfDisks}
             setNumberOfDisks={setNumberOfDisks}
             numbersPerDisk={numbersPerDisk}

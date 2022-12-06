@@ -11,6 +11,13 @@ import {
   Typography
 } from '@mui/material';
 
+const sumMarks = [
+  { value: 10, label: '10' },
+  { value: 20, label: '20' },
+  { value: 50, label: '50' },
+  { value: 100, label: '100' },
+];
+
 const numbersMarks = [
   { value: 2, label: '2' },
   { value: 4, label: '4' },
@@ -25,6 +32,10 @@ const disksMarks = [
 ];
 
 const SettingsDialog = (props) => {
+  const onSumChange = (event, newValue) => {
+    props.setSum(newValue);
+  }
+  
   const onNumbersChange = (event, newValue) => {
     props.setNumbersPerDisk(newValue);
   }
@@ -49,6 +60,20 @@ const SettingsDialog = (props) => {
       <DialogTitle id="settings-dialog-title">Settings</DialogTitle>
       <DialogContent id="settings-dialog-content">
         <DialogContentText component="div" sx={{ mb: 3 }}>
+          <Typography id="sum-slider">
+            Sum of numbers
+          </Typography>
+          <Slider 
+            aria-labelledby="sum-slider"
+            value={props.sum}
+            onChangeCommitted={onSumChange}
+            step={null}
+            min={10}
+            max={100}
+            marks={sumMarks}
+          />
+        </DialogContentText>
+        <DialogContentText component="div" sx={{ mb: 3 }}>
           <Typography id="numbers-slider">
             Numbers per disk
           </Typography>
@@ -56,7 +81,7 @@ const SettingsDialog = (props) => {
             aria-labelledby="numbers-slider"
             value={props.numbersPerDisk}
             onChangeCommitted={onNumbersChange}
-            step={2}
+            step={null}
             min={2}
             max={6}
             marks={numbersMarks}
@@ -70,7 +95,7 @@ const SettingsDialog = (props) => {
             aria-labelledby="disks-slider"
             value={props.numberOfDisks}
             onChangeCommitted={onDisksChange}
-            step={1}
+            step={null}
             min={3}
             max={6}
             marks={disksMarks}
