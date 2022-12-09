@@ -170,7 +170,7 @@ function App() {
             hasWon={hasWon}
           />
         </Box>
-        <Box role="main" sx={{ flexGrow: 1, height: "calc(100% - 4rem)"}}>
+        <Box role="main" sx={{ flexGrow: 1, height: "calc(100% - 3rem)"}}>
           <ReactDisks 
             disksText={disksText}
             theme={theme.palette.primary}

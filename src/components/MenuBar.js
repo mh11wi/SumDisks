@@ -33,8 +33,8 @@ const MenuBar = (props) => {
   
   return (
     <AppBar position="relative">
-      <Toolbar>
-        <Typography variant="h5" component="h1" sx={{ flexGrow: 1 }}>
+      <Toolbar variant="dense">
+        <Typography variant="h6" component="h1" sx={{ flexGrow: 1 }}>
           Sum Disks
         </Typography>
         <IconButton aria-label="Help" onClick={handleClickHelp} color="inherit">
