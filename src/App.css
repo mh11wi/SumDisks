@@ -5,3 +5,19 @@ html, body, #root, .App {
 .App {
   overflow: hidden;
 }
+
+.Game {
+  width: 100%;
+}
+
+@media (orientation: portrait) and (max-width: 600px) {
+  .Game {
+    width: 95%;
+  }
+}
+
+@media (orientation: portrait) and (min-width: 600px) and (max-width: 768px) {
+  .Game {
+    width: 80%;
+  }
+}

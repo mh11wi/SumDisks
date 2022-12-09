@@ -156,21 +156,19 @@ function App() {
   return (
     <div className="App">
       <ThemeProvider theme={theme}>
-        <Box sx={{ flexGrow: 1 }}>
-          <MenuBar 
-            handleClickNewGame={handleClickNewGame}
-            sum={sum}
-            setSum={setSum}
-            numberOfDisks={numberOfDisks}
-            setNumberOfDisks={setNumberOfDisks}
-            numbersPerDisk={numbersPerDisk}
-            setNumbersPerDisk={setNumbersPerDisk}
-            includeNegatives={includeNegatives}
-            setIncludeNegatives={setIncludeNegatives}
-            hasWon={hasWon}
-          />
-        </Box>
-        <Box role="main" sx={{ flexGrow: 1, height: "calc(100% - 3rem)"}}>
+        <MenuBar 
+          handleClickNewGame={handleClickNewGame}
+          sum={sum}
+          setSum={setSum}
+          numberOfDisks={numberOfDisks}
+          setNumberOfDisks={setNumberOfDisks}
+          numbersPerDisk={numbersPerDisk}
+          setNumbersPerDisk={setNumbersPerDisk}
+          includeNegatives={includeNegatives}
+          setIncludeNegatives={setIncludeNegatives}
+          hasWon={hasWon}
+        />
+        <Box role="main" className="Game" sx={{ margin: "auto", height: "calc(100% - 3rem)" }}>
           <ReactDisks 
             disksText={disksText}
             theme={theme.palette.primary}
