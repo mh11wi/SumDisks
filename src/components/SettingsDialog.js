@@ -114,7 +114,7 @@ const SettingsDialog = (props) => {
         </DialogContentText>
       </DialogContent>
       <DialogActions>
-        <Button autoFocus onClick={props.onClose}>Close</Button>
+        <Button onClick={props.onClose}>Close</Button>
       </DialogActions>
     </Dialog>
   );

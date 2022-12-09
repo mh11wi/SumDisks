@@ -6,7 +6,7 @@ import SettingsDialog from './SettingsDialog';
 
 const MenuBar = (props) => {
   const actionRef = createRef();
-  const [helpOpen, setHelpOpen] = useState(false);
+  const [helpOpen, setHelpOpen] = useState(true);
   const [settingsOpen, setSettingsOpen] = useState(false);
   
   useEffect(() => {
