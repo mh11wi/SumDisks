@@ -29,6 +29,7 @@ const disksMarks = [
   { value: 4, label: '4' },
   { value: 5, label: '5' },
   { value: 6, label: '6' },
+  { value: 7, label: '7' },
 ];
 
 const SettingsDialog = (props) => {
@@ -58,8 +59,8 @@ const SettingsDialog = (props) => {
       onClose={props.onClose}
     >
       <DialogTitle id="settings-dialog-title">Settings</DialogTitle>
-      <DialogContent id="settings-dialog-content">
-        <DialogContentText component="div" sx={{ mb: 3 }}>
+      <DialogContent id="settings-dialog-content" dividers={true}>
+        <DialogContentText component="div" sx={{ mb: 1 }}>
           <Typography id="sum-slider">
             Sum of numbers
           </Typography>
@@ -73,7 +74,7 @@ const SettingsDialog = (props) => {
             marks={sumMarks}
           />
         </DialogContentText>
-        <DialogContentText component="div" sx={{ mb: 3 }}>
+        <DialogContentText component="div" sx={{ mb: 1 }}>
           <Typography id="numbers-slider">
             Numbers per disk
           </Typography>
@@ -87,7 +88,7 @@ const SettingsDialog = (props) => {
             marks={numbersMarks}
           />
         </DialogContentText>
-        <DialogContentText component="div" sx={{ mb: 3 }}>
+        <DialogContentText component="div" sx={{ mb: 1 }}>
           <Typography id="disks-slider">
             Number of disks
           </Typography>
@@ -97,7 +98,7 @@ const SettingsDialog = (props) => {
             onChangeCommitted={onDisksChange}
             step={null}
             min={3}
-            max={6}
+            max={7}
             marks={disksMarks}
           />
         </DialogContentText>

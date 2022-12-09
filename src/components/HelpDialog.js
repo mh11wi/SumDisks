@@ -25,7 +25,7 @@ const HelpDialog = (props) => {
       onClose={props.onClose}
     >
       <DialogTitle id="help-dialog-title">How To Play</DialogTitle>
-      <DialogContent id="help-dialog-content">
+      <DialogContent id="help-dialog-content" dividers={true} sx={{ px: 2, py: 0 }}>
         <DialogContentText component="div">
           <List>
             <ListItem disablePadding>
@@ -41,13 +41,13 @@ const HelpDialog = (props) => {
                 This game was inspired by a physical version I saw at <Link href="https://www.museumofplay.org/" target="_blank">The Strong National Museum of Play</Link>. Some variability was added.
               </ListItemText>
             </ListItem>
-            <ListItem sx={{ mt: 1 }}>
+            <ListItem disablePadding sx={{ mt: 2, px: 0 }}>
               <ListItemIcon>
                 <Settings />
               </ListItemIcon>
               <ListItemText primary="Open the settings menu to adjust the game" />
             </ListItem>
-            <ListItem>
+            <ListItem sx={{ px: 0 }}>
               <ListItemIcon>
                 <FastForward />
               </ListItemIcon>
@@ -56,12 +56,10 @@ const HelpDialog = (props) => {
           </List>
         </DialogContentText>
       </DialogContent>
-      <DialogContent dividers={true}>
-        <DialogContentText component="div">
+      <DialogActions>
+        <DialogContentText sx={{ ml: 1, flexGrow: 1 }}>
           Like Sum Disks? Try <Link href="https://mh11wi.github.io/WordDisks/" target="_blank">Word Disks</Link>!
         </DialogContentText>
-      </DialogContent>
-      <DialogActions>
         <Button autoFocus onClick={props.onClose}>Close</Button>
       </DialogActions>
     </Dialog>
