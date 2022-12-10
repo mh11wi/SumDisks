@@ -16,7 +16,7 @@ html, body, #root, .App {
   }
 }
 
-@media (orientation: portrait) and (min-width: 600px) and (max-width: 768px) {
+@media (orientation: portrait) and (min-width: 600px) {
   .Game {
     width: 80%;
   }
