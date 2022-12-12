@@ -41,7 +41,7 @@ const HelpDialog = (props) => {
                 This game was inspired by a physical version I saw at <Link href="https://www.museumofplay.org/" target="_blank">The Strong National Museum of Play</Link>. Some variability was added.
               </ListItemText>
             </ListItem>
-            <ListItem disablePadding sx={{ mt: 2, px: 0 }}>
+            <ListItem sx={{ mt: 1, px: 0 }}>
               <ListItemIcon>
                 <Settings />
               </ListItemIcon>
