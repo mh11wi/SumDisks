@@ -124,10 +124,10 @@ function newGame(sum, numberOfDisks, numbersPerDisk, includeNegatives) {
 
 function App() {
   const [disksText, setDisksText] = useState(null);
-  const [sum, setSum] = useState(100);
-  const [numberOfDisks, setNumberOfDisks] = useState(4);
-  const [numbersPerDisk, setNumbersPerDisk] = useState(4);
-  const [includeNegatives, setIncludeNegatives] = useState(false);
+  const [sum, setSum] = useState(parseInt(localStorage.getItem('sum')) || 100);
+  const [numberOfDisks, setNumberOfDisks] = useState(parseInt(localStorage.getItem('numberOfDisks')) || 4);
+  const [numbersPerDisk, setNumbersPerDisk] = useState(parseInt(localStorage.getItem('numbersPerDisk')) || 4);
+  const [includeNegatives, setIncludeNegatives] = useState(localStorage.getItem('includeNegatives') === 'true');
   const [hasWon, setHasWon] = useState(false);
   
   useEffect(() => {
@@ -153,19 +153,39 @@ function App() {
     setHasWon(false);
   }
   
+  const handleChangeSum = (val) => {
+    setSum(val);
+    localStorage.setItem('sum', val);
+  }
+  
+  const handleChangeNumberOfDisks = (val) => {
+    setNumberOfDisks(val);
+    localStorage.setItem('numberOfDisks', val);
+  }
+  
+  const handleChangeNumbersPerDisk = (val) => {
+    setNumbersPerDisk(val);
+    localStorage.setItem('numbersPerDisk', val);
+  }
+  
+  const handleChangeIncludeNegatives = (val) => {
+    setIncludeNegatives(val);
+    localStorage.setItem('includeNegatives', val);
+  }
+  
   return (
     <div className="App">
       <ThemeProvider theme={theme}>
         <MenuBar 
           handleClickNewGame={handleClickNewGame}
           sum={sum}
-          setSum={setSum}
+          setSum={handleChangeSum}
           numberOfDisks={numberOfDisks}
-          setNumberOfDisks={setNumberOfDisks}
+          setNumberOfDisks={handleChangeNumberOfDisks}
           numbersPerDisk={numbersPerDisk}
-          setNumbersPerDisk={setNumbersPerDisk}
+          setNumbersPerDisk={handleChangeNumbersPerDisk}
           includeNegatives={includeNegatives}
-          setIncludeNegatives={setIncludeNegatives}
+          setIncludeNegatives={handleChangeIncludeNegatives}
           hasWon={hasWon}
         />
         <Box role="main" className="Game" sx={{ margin: "auto", height: "calc(100% - 3rem)" }}>
