@@ -124,10 +124,10 @@ function newGame(sum, numberOfDisks, numbersPerDisk, includeNegatives) {
 
 function App() {
   const [disksText, setDisksText] = useState(null);
-  const [sum, setSum] = useState(parseInt(localStorage.getItem('sum')) || 100);
-  const [numberOfDisks, setNumberOfDisks] = useState(parseInt(localStorage.getItem('numberOfDisks')) || 4);
-  const [numbersPerDisk, setNumbersPerDisk] = useState(parseInt(localStorage.getItem('numbersPerDisk')) || 4);
-  const [includeNegatives, setIncludeNegatives] = useState(localStorage.getItem('includeNegatives') === 'true');
+  const [sum, setSum] = useState(parseInt(localStorage.getItem('sd-sum')) || 100);
+  const [numberOfDisks, setNumberOfDisks] = useState(parseInt(localStorage.getItem('sd-numberOfDisks')) || 4);
+  const [numbersPerDisk, setNumbersPerDisk] = useState(parseInt(localStorage.getItem('sd-numbersPerDisk')) || 4);
+  const [includeNegatives, setIncludeNegatives] = useState(localStorage.getItem('sd-includeNegatives') === 'true');
   const [hasWon, setHasWon] = useState(false);
   
   useEffect(() => {
@@ -155,22 +155,22 @@ function App() {
   
   const handleChangeSum = (val) => {
     setSum(val);
-    localStorage.setItem('sum', val);
+    localStorage.setItem('sd-sum', val);
   }
   
   const handleChangeNumberOfDisks = (val) => {
     setNumberOfDisks(val);
-    localStorage.setItem('numberOfDisks', val);
+    localStorage.setItem('sd-numberOfDisks', val);
   }
   
   const handleChangeNumbersPerDisk = (val) => {
     setNumbersPerDisk(val);
-    localStorage.setItem('numbersPerDisk', val);
+    localStorage.setItem('sd-numbersPerDisk', val);
   }
   
   const handleChangeIncludeNegatives = (val) => {
     setIncludeNegatives(val);
-    localStorage.setItem('includeNegatives', val);
+    localStorage.setItem('sd-includeNegatives', val);
   }
   
   return (
