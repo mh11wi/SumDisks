@@ -83,7 +83,7 @@ const MenuBar = (props) => {
           sum={props.sum}
         />
         
-        <Typography variant="h6" component="h1" align="center" sx={{ flexGrow: 1 }}>
+        <Typography variant="h5" component="h1" align="center" sx={{ fontWeight: 500, flexGrow: 1 }}>
           Sum Disks
         </Typography>
         
