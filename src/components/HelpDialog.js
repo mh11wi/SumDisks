@@ -40,46 +40,50 @@ const HelpDialog = (props) => {
               </ListItemText>
             </ListItem>
             
-            <ListItem sx={{ pb: 0 }}>
+            <ListItem alignItems="flex-start" sx={{ flexDirection: 'column', pb: 0 }}>
               <ListItemText>
                 If you ever feel stuck, the following icons may assist you:
               </ListItemText>
-            </ListItem>
-            <ListItem sx={{ py: 0 }}>
-              <ListItemIcon>
-                <Help />
-              </ListItemIcon>
-              <ListItemText primary="Open this help dialog again" />
-            </ListItem>
-            <ListItem sx={{ py: 0 }}>
-              <ListItemIcon>
-                <Lightbulb />
-              </ListItemIcon>
-              <ListItemText primary="Read some tips & tidbits about the game" />
-            </ListItem>
-            <ListItem sx={{ pt: 0 }}>
-              <ListItemIcon>
-                <Calculate />
-              </ListItemIcon>
-              <ListItemText primary="Check the current sum of each column" />
+              <List>
+                <ListItem sx={{ py: 0 }}>
+                  <ListItemIcon>
+                    <Help />
+                  </ListItemIcon>
+                  <ListItemText primary="Open this help dialog again" />
+                </ListItem>
+                <ListItem sx={{ py: 0 }}>
+                  <ListItemIcon>
+                    <Lightbulb />
+                  </ListItemIcon>
+                  <ListItemText primary="Read some tips & tidbits about the game" />
+                </ListItem>
+                <ListItem sx={{ py: 0 }}>
+                  <ListItemIcon>
+                    <Calculate />
+                  </ListItemIcon>
+                  <ListItemText primary="Check the current sum of each column" />
+                </ListItem>
+              </List>
             </ListItem>
             
-            <ListItem sx={{ pb: 0 }}>
+            <ListItem alignItems="flex-start" sx={{ flexDirection: 'column', pb: 0 }}>
               <ListItemText>
                 Play as much as you like! Each game is randomly generated, so the fun is endless. When you are ready to try another, use the following icons:
               </ListItemText>
-            </ListItem>
-            <ListItem sx={{ py: 0 }}>
-              <ListItemIcon>
-                <Settings />
-              </ListItemIcon>
-              <ListItemText primary="Change the difficulty of the next game" />
-            </ListItem>
-            <ListItem sx={{ pt: 0 }}>
-              <ListItemIcon>
-                <FastForward />
-              </ListItemIcon>
-              <ListItemText primary="Start a new game with the same settings" />
+              <List>
+                <ListItem sx={{ py: 0 }}>
+                  <ListItemIcon>
+                    <Settings />
+                  </ListItemIcon>
+                  <ListItemText primary="Change the settings/difficulty of the next game" />
+                </ListItem>
+                <ListItem sx={{ py: 0 }}>
+                  <ListItemIcon>
+                    <FastForward />
+                  </ListItemIcon>
+                  <ListItemText primary="Start a new game with the same settings" />
+                </ListItem>
+              </List>
             </ListItem>
           </List>
         </DialogContentText>
