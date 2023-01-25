@@ -222,7 +222,7 @@ function App() {
           hasWon={hasWon}
           getColumnSums={getColumnSums}
         />
-        <Box role="main" className="Game" sx={{ margin: "auto", height: "calc(100% - 3rem)" }}>
+        <Box role="main" className="Game">
           <ReactDisks 
             disksText={disksText}
             theme={theme.palette.primary}
