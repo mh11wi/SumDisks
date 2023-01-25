@@ -12,7 +12,7 @@ import {
   ListItemIcon,
   ListItemText
 } from '@mui/material';
-import { FastForward, Settings } from '@mui/icons-material';
+import { Calculate, FastForward, Help, Lightbulb, Settings } from '@mui/icons-material';
 
 const HelpDialog = (props) => {
   return (
@@ -28,26 +28,54 @@ const HelpDialog = (props) => {
       <DialogContent id="help-dialog-content" dividers={true} sx={{ px: 2, py: 0 }}>
         <DialogContentText component="div">
           <List>
-            <ListItem disablePadding>
+            <ListItem>
               <ListItemText>
                 Rotate the disks so every column of numbers add up to { props.sum }.
               </ListItemText>
             </ListItem>
-            <ListItem disablePadding>
-              <ListItemText primary="You can rotate a disk by clicking on it, and then clicking either the clockwise or counterclockwise arrow." />
-            </ListItem>
-            <ListItem disablePadding>
+            
+            <ListItem>
               <ListItemText>
-                This game was inspired by a physical version I saw at <Link href="https://www.museumofplay.org/" target="_blank">The Strong National Museum of Play</Link>. Some variability was added.
+                You can rotate a disk by clicking on it, and then clicking either the clockwise or counterclockwise arrows that appear.
               </ListItemText>
             </ListItem>
-            <ListItem sx={{ mt: 1, px: 0 }}>
+            
+            <ListItem sx={{ pb: 0 }}>
+              <ListItemText>
+                If you ever feel stuck, the following icons may assist you:
+              </ListItemText>
+            </ListItem>
+            <ListItem sx={{ py: 0 }}>
+              <ListItemIcon>
+                <Help />
+              </ListItemIcon>
+              <ListItemText primary="Open this help dialog again" />
+            </ListItem>
+            <ListItem sx={{ py: 0 }}>
+              <ListItemIcon>
+                <Lightbulb />
+              </ListItemIcon>
+              <ListItemText primary="Read some tips & tidbits about the game" />
+            </ListItem>
+            <ListItem sx={{ pt: 0 }}>
+              <ListItemIcon>
+                <Calculate />
+              </ListItemIcon>
+              <ListItemText primary="Check the current sum of each column" />
+            </ListItem>
+            
+            <ListItem sx={{ pb: 0 }}>
+              <ListItemText>
+                Play as much as you like! Each game is randomly generated, so the fun is endless. When you are ready to try another, use the following icons:
+              </ListItemText>
+            </ListItem>
+            <ListItem sx={{ py: 0 }}>
               <ListItemIcon>
                 <Settings />
               </ListItemIcon>
-              <ListItemText primary="Open the settings menu for the game" />
+              <ListItemText primary="Change the difficulty of the next game" />
             </ListItem>
-            <ListItem sx={{ px: 0 }}>
+            <ListItem sx={{ pt: 0 }}>
               <ListItemIcon>
                 <FastForward />
               </ListItemIcon>

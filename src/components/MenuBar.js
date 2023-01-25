@@ -4,10 +4,12 @@ import { Calculate, FastForward, Help, Home, Lightbulb, Settings } from '@mui/ic
 import HelpDialog from './HelpDialog';
 import SettingsDialog from './SettingsDialog';
 import SumDialog from './SumDialog';
+import TipsDialog from './TipsDialog';
 
 const MenuBar = (props) => {
   const actionRef = createRef();
   const [helpOpen, setHelpOpen] = useState(true);
+  const [tipsOpen, setTipsOpen] = useState(false);
   const [settingsOpen, setSettingsOpen] = useState(false);
   const [calculationsOpen, setCalculationsOpen] = useState(false);
   const [columnSums, setColumnSums] = useState(null);
@@ -24,6 +26,14 @@ const MenuBar = (props) => {
   
   const handleCloseHelp = () => {
     setHelpOpen(false);
+  }
+  
+  const handleClickTips = () => {
+    setTipsOpen(true);
+  }
+  
+  const handleCloseTips = () => {
+    setTipsOpen(false);
   }
   
   const handleClickSettings = () => {
@@ -46,9 +56,6 @@ const MenuBar = (props) => {
   return (
     <AppBar position="relative">
       <Toolbar variant="dense">
-        <IconButton aria-label="Home" href="https://mh11wi.github.io" color="inherit">
-          <Home />
-        </IconButton>
         <IconButton aria-label="Help" onClick={handleClickHelp} color="inherit">
           <Help />
         </IconButton>
@@ -57,12 +64,15 @@ const MenuBar = (props) => {
           onClose={handleCloseHelp}
           sum={props.sum}
         />
-        <IconButton aria-label="Tips" color="inherit">
+        
+        <IconButton aria-label="Tips" onClick={handleClickTips} color="inherit">
           <Lightbulb />
         </IconButton>
-        <Typography variant="h6" component="h1" align="center" sx={{ flexGrow: 1 }}>
-          Sum Disks
-        </Typography>
+        <TipsDialog
+          open={tipsOpen}
+          onClose={handleCloseTips}
+        />
+        
         <IconButton aria-label="Calculations" onClick={handleClickCalculations} color="inherit">
           <Calculate />
         </IconButton>
@@ -72,6 +82,11 @@ const MenuBar = (props) => {
           data={columnSums}
           sum={props.sum}
         />
+        
+        <Typography variant="h6" component="h1" align="center" sx={{ flexGrow: 1 }}>
+          Sum Disks
+        </Typography>
+        
         <IconButton aria-label="Settings" onClick={handleClickSettings} color="inherit">
           <Settings />
         </IconButton>
@@ -87,8 +102,12 @@ const MenuBar = (props) => {
           includeNegatives={props.includeNegatives}
           setIncludeNegatives={props.setIncludeNegatives}
         />
+        
         <IconButton action={actionRef} aria-label="New Game" onClick={props.handleClickNewGame} color="inherit">
           <FastForward />
+        </IconButton>
+        <IconButton aria-label="Home" href="https://mh11wi.github.io" color="inherit">
+          <Home />
         </IconButton>
       </Toolbar>
     </AppBar>
