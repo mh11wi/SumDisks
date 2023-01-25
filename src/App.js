@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import pink from '@mui/material/colors/pink';
+import { green, pink } from '@mui/material/colors';
 import Box from '@mui/material/Box';
 import party from "party-js";
 import ReactDisks from 'react-disks';
@@ -17,8 +17,13 @@ const theme = createTheme({
       main: pink[500],
       light: pink[100],
       dark: pink[800]
-    }
-  },
+    },
+    success: {
+      light: green[100],
+      main: green[500],
+      dark: green[900]
+    },
+  }
 });
 
 function getRandomInt(min, max) {
@@ -124,6 +129,7 @@ function newGame(sum, numberOfDisks, numbersPerDisk, includeNegatives) {
 
 function App() {
   const [disksText, setDisksText] = useState(null);
+  const [rotatedDisksText, setRotatedDisksText] = useState(null);
   const [sum, setSum] = useState(parseInt(localStorage.getItem('sd-sum')) || 100);
   const [numberOfDisks, setNumberOfDisks] = useState(parseInt(localStorage.getItem('sd-numberOfDisks')) || 4);
   const [numbersPerDisk, setNumbersPerDisk] = useState(parseInt(localStorage.getItem('sd-numbersPerDisk')) || 4);
@@ -131,7 +137,9 @@ function App() {
   const [hasWon, setHasWon] = useState(false);
   
   useEffect(() => {
-    setDisksText(newGame(sum, numberOfDisks, numbersPerDisk, includeNegatives));
+    const game = newGame(sum, numberOfDisks, numbersPerDisk, includeNegatives);
+    setDisksText(game);
+    setRotatedDisksText(game);
     setHasWon(false);
   }, [sum, numberOfDisks, numbersPerDisk, includeNegatives]);
   
@@ -145,11 +153,14 @@ function App() {
   }, [hasWon]);
   
   const onRotate = (rotatedDisksText) => {
+    setRotatedDisksText((rotatedDisksText));
     setTimeout(() => setHasWon(isSolved(sum, rotatedDisksText)), 500);
   }
   
   const handleClickNewGame = () => {
-    setDisksText(newGame(sum, numberOfDisks, numbersPerDisk, includeNegatives));
+    const game = newGame(sum, numberOfDisks, numbersPerDisk, includeNegatives);
+    setDisksText(game);
+    setRotatedDisksText(game);
     setHasWon(false);
   }
   
@@ -173,6 +184,18 @@ function App() {
     localStorage.setItem('sd-includeNegatives', val);
   }
   
+  const getColumnSums = () => {
+    const columnSums = [];
+    const numberMatrix = transpose(rotatedDisksText);
+    for (let i=0; i < numberMatrix.length; i++) {
+      columnSums.push({
+        calculation: numberMatrix[i].join(' + '),
+        sum: getSum(numberMatrix[i])
+      });
+    }
+    return columnSums;
+  }
+  
   return (
     <div className="App">
       <ThemeProvider theme={theme}>
@@ -187,6 +210,7 @@ function App() {
           includeNegatives={includeNegatives}
           setIncludeNegatives={handleChangeIncludeNegatives}
           hasWon={hasWon}
+          getColumnSums={getColumnSums}
         />
         <Box role="main" className="Game" sx={{ margin: "auto", height: "calc(100% - 3rem)" }}>
           <ReactDisks 
