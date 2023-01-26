@@ -23,16 +23,6 @@ const theme = createTheme({
       main: green[500],
       dark: green[900]
     },
-  },
-  components: {
-    MuiListItem: {
-      styleOverrides: {
-        root: {
-          paddingLeft: 0,
-          paddingRight: 0,
-        }
-      }
-    }
   }
 });
 

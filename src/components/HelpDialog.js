@@ -25,7 +25,7 @@ const HelpDialog = (props) => {
       onClose={props.onClose}
     >
       <DialogTitle id="help-dialog-title">How To Play</DialogTitle>
-      <DialogContent id="help-dialog-content" dividers={true} sx={{ px: 2, py: 0 }}>
+      <DialogContent id="help-dialog-content" dividers={true} sx={{ p: 0 }}>
         <DialogContentText component="div">
           <List>
             <ListItem>
@@ -75,7 +75,7 @@ const HelpDialog = (props) => {
                   <ListItemIcon>
                     <Settings />
                   </ListItemIcon>
-                  <ListItemText primary="Change the settings/difficulty of the next game" />
+                  <ListItemText primary="Change the game settings/difficulty" />
                 </ListItem>
                 <ListItem sx={{ py: 0 }}>
                   <ListItemIcon>
