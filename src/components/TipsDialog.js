@@ -56,7 +56,7 @@ const steps = [
   {
     icon: ( <EmojiEvents /> ),
     primary: 'Keep Practicing',
-    secondary: 'This game is a great way to exercise your mental math skills! Practice at your own pace, or if you are up for a challenge, try increasing the number disks, numbers per disk, and/or sum of numbers.'
+    secondary: 'This game is a great way to exercise your mental math skills! Practice at your own pace, or if you are up for a challenge, try increasing the number of disks, numbers per disk, or sum of numbers.'
   }
 ];
 
