@@ -1,7 +1,7 @@
 {
   "files": {
-    "main.css": "/SumDisks/static/css/main.afc9dcae.css",
-    "main.js": "/SumDisks/static/js/main.b2ce20c6.js",
+    "main.css": "/SumDisks/static/css/main.5726eb13.css",
+    "main.js": "/SumDisks/static/js/main.807f964b.js",
     "static/media/OpenDyslexic-Regular.woff2": "/SumDisks/static/media/OpenDyslexic-Regular.30ddd7034b273ecf2b6a.woff2",
     "static/media/roboto-all-500-normal.woff": "/SumDisks/static/media/roboto-all-500-normal.0ab669b7a0d19b178f57.woff",
     "static/media/roboto-all-700-normal.woff": "/SumDisks/static/media/roboto-all-700-normal.a457fde362a540fcadff.woff",
@@ -36,11 +36,11 @@
     "static/media/roboto-greek-ext-300-normal.woff2": "/SumDisks/static/media/roboto-greek-ext-300-normal.35b9d6be04b95f0f0530.woff2",
     "static/media/roboto-greek-ext-700-normal.woff2": "/SumDisks/static/media/roboto-greek-ext-700-normal.bd9854c751441ccc1a70.woff2",
     "index.html": "/SumDisks/index.html",
-    "main.afc9dcae.css.map": "/SumDisks/static/css/main.afc9dcae.css.map",
-    "main.b2ce20c6.js.map": "/SumDisks/static/js/main.b2ce20c6.js.map"
+    "main.5726eb13.css.map": "/SumDisks/static/css/main.5726eb13.css.map",
+    "main.807f964b.js.map": "/SumDisks/static/js/main.807f964b.js.map"
   },
   "entrypoints": [
-    "static/css/main.afc9dcae.css",
-    "static/js/main.b2ce20c6.js"
+    "static/css/main.5726eb13.css",
+    "static/js/main.807f964b.js"
   ]
 }
