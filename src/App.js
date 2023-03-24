@@ -3,8 +3,10 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { green, pink } from '@mui/material/colors';
 import Box from '@mui/material/Box';
 import party from "party-js";
+import AdSense from 'react-adsense';
 import ReactDisks from 'react-disks';
 import MenuBar from './components/MenuBar';
+import useWindowOrientation from './hooks/useWindowOrientation';
 import '@fontsource/roboto/300.css';
 import '@fontsource/roboto/400.css';
 import '@fontsource/roboto/500.css';
@@ -25,6 +27,13 @@ const theme = createTheme({
     },
   }
 });
+
+const adStyle = {
+  display: 'block',
+  width: 'calc(100% - 1rem)',
+  height: 'calc(100% - 1rem)',
+  margin: '0.5rem'
+};
 
 function getRandomInt(min, max) {
   min = Math.ceil(min);
@@ -135,6 +144,7 @@ function App() {
   const [numbersPerDisk, setNumbersPerDisk] = useState(parseInt(localStorage.getItem('sd-numbersPerDisk')) || 4);
   const [includeNegatives, setIncludeNegatives] = useState(localStorage.getItem('sd-includeNegatives') === 'true');
   const [hasWon, setHasWon] = useState(false);
+  const {orientation} = useWindowOrientation();
   
   useEffect(() => {
     const game = newGame(sum, numberOfDisks, numbersPerDisk, includeNegatives);
@@ -199,27 +209,62 @@ function App() {
   return (
     <div className="App">
       <ThemeProvider theme={theme}>
-        <MenuBar 
-          handleClickNewGame={handleClickNewGame}
-          sum={sum}
-          setSum={handleChangeSum}
-          numberOfDisks={numberOfDisks}
-          setNumberOfDisks={handleChangeNumberOfDisks}
-          numbersPerDisk={numbersPerDisk}
-          setNumbersPerDisk={handleChangeNumbersPerDisk}
-          includeNegatives={includeNegatives}
-          setIncludeNegatives={handleChangeIncludeNegatives}
-          hasWon={hasWon}
-          getColumnSums={getColumnSums}
-        />
-        <Box role="main" className="Game">
-          <ReactDisks 
-            disksText={disksText}
-            theme={theme.palette.primary}
-            onRotate={onRotate}
-            disabled={hasWon}
+        {orientation === 'landscape' && 
+          <Box className="vertical-ad-left">
+            <AdSense.Google
+              client="ca-pub-9808989635264198"
+              slot="9091776362"
+              style={adStyle}
+              format=""
+              responsive="true"
+            />
+          </Box>
+        }
+        <Box role="main" className="Main">
+          <MenuBar 
+            handleClickNewGame={handleClickNewGame}
+            sum={sum}
+            setSum={handleChangeSum}
+            numberOfDisks={numberOfDisks}
+            setNumberOfDisks={handleChangeNumberOfDisks}
+            numbersPerDisk={numbersPerDisk}
+            setNumbersPerDisk={handleChangeNumbersPerDisk}
+            includeNegatives={includeNegatives}
+            setIncludeNegatives={handleChangeIncludeNegatives}
+            hasWon={hasWon}
+            getColumnSums={getColumnSums}
           />
+          <Box className="Game">
+            <ReactDisks 
+              disksText={disksText}
+              theme={theme.palette.primary}
+              onRotate={onRotate}
+              disabled={hasWon}
+            />
+          </Box>
         </Box>
+        {orientation === 'landscape' && 
+          <Box className="vertical-ad-right">
+            <AdSense.Google
+              client="ca-pub-9808989635264198"
+              slot="6465613026"
+              style={adStyle}
+              format=""
+              responsive="true"
+            />
+          </Box>
+        }
+        {orientation === 'portrait' && 
+          <Box className="horizontal-ad">
+            <AdSense.Google
+              client="ca-pub-9808989635264198"
+              slot="2074941876"
+              style={adStyle}
+              format=""
+              responsive="true"
+            />
+          </Box>
+        }
       </ThemeProvider>
     </div>
   );
