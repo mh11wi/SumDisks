@@ -1,5 +1,15 @@
 import { useEffect, useState } from "react";
 
+function debounce(func) {
+  let timer;
+  return function(event) {
+    if (timer) {
+      clearTimeout(timer);
+    }
+    timer = setTimeout(func, 500, event);
+  };
+}
+
 function getWindowOrientation() {
   const { innerWidth: width, innerHeight: height } = window;
   return { orientation: width > height ? 'landscape' : 'portrait' };
@@ -15,8 +25,8 @@ export default function useWindowOrientation() {
       setWindowOrientation(getWindowOrientation());
     }
 
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
+    window.addEventListener("resize", debounce(handleResize));
+    return () => window.removeEventListener("resize", debounce(handleResize));
   }, []);
 
   return windowOrientation;
