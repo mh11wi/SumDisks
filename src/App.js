@@ -144,7 +144,7 @@ function App() {
   const [numbersPerDisk, setNumbersPerDisk] = useState(parseInt(localStorage.getItem('sd-numbersPerDisk')) || 4);
   const [includeNegatives, setIncludeNegatives] = useState(localStorage.getItem('sd-includeNegatives') === 'true');
   const [hasWon, setHasWon] = useState(false);
-  const {orientation} = useWindowOrientation();
+  const { orientation, resizing } = useWindowOrientation();
   
   useEffect(() => {
     const game = newGame(sum, numberOfDisks, numbersPerDisk, includeNegatives);
@@ -209,7 +209,7 @@ function App() {
   return (
     <div className="App">
       <ThemeProvider theme={theme}>
-        {orientation === 'landscape' && 
+        {orientation === 'landscape' && !resizing && 
           <Box className="vertical-ad-left">
             <AdSense.Google
               client="ca-pub-9808989635264198"
@@ -243,7 +243,7 @@ function App() {
             />
           </Box>
         </Box>
-        {orientation === 'landscape' && 
+        {orientation === 'landscape' && !resizing && 
           <Box className="vertical-ad-right">
             <AdSense.Google
               client="ca-pub-9808989635264198"
@@ -254,7 +254,7 @@ function App() {
             />
           </Box>
         }
-        {orientation === 'portrait' && 
+        {orientation === 'portrait' && !resizing && 
           <Box className="horizontal-ad">
             <AdSense.Google
               client="ca-pub-9808989635264198"

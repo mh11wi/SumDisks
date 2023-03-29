@@ -1,33 +1,30 @@
 import { useEffect, useState } from "react";
 
-function debounce(func) {
-  let timer;
-  return function(event) {
-    if (timer) {
-      clearTimeout(timer);
-    }
-    timer = setTimeout(func, 500, event);
-  };
-}
-
 function getWindowOrientation() {
   const { innerWidth: width, innerHeight: height } = window;
-  return { orientation: width > height ? 'landscape' : 'portrait' };
+  return width > height ? 'landscape' : 'portrait';
 }
 
 export default function useWindowOrientation() {
-  const [windowOrientation, setWindowOrientation] = useState(
-    getWindowOrientation()
-  );
+  const [windowOrientation, setWindowOrientation] = useState({
+    orientation: getWindowOrientation(),
+    resizing: false
+  });
 
   useEffect(() => {
     function handleResize() {
-      setWindowOrientation(getWindowOrientation());
+      setWindowOrientation({ orientation: getWindowOrientation(), resizing: true });
     }
 
-    window.addEventListener("resize", debounce(handleResize));
-    return () => window.removeEventListener("resize", debounce(handleResize));
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
   }, []);
+  
+  useEffect(() => {
+    if (windowOrientation.resizing) {
+      setTimeout(() => setWindowOrientation({ ...windowOrientation, resizing: false }), 1000);
+    }
+  }, [windowOrientation]);
 
   return windowOrientation;
 }
