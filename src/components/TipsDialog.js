@@ -28,7 +28,7 @@ const steps = [
   {
     icon: ( <Lightbulb /> ),
     primary: 'Pro Tip',
-    secondary: 'Look for the biggest or smallest number as a starting point. Focus on this column and try to find other numbers in each disk that could work with it. Typically if there is one really big number in a column the others will be small, and vice versa.'
+    secondary: 'Look for the biggest number as a starting point. Focus on this column and try to find other numbers in each disk that could work with it. Typically if there is one really big number in a column, the others will be small.'
   },
   {
     icon: ( <EmojiEmotions /> ),
