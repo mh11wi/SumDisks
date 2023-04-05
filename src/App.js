@@ -168,6 +168,11 @@ function App() {
   }
   
   const handleClickNewGame = () => {
+    window.adBreak({
+      type: 'next',
+      name: 'new-game',
+    });
+
     const game = newGame(sum, numberOfDisks, numbersPerDisk, includeNegatives);
     setDisksText(game);
     setRotatedDisksText(game);
