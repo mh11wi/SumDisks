@@ -65,7 +65,9 @@ const MenuBar = (props) => {
       try {
         await navigator.share(shareData);
       } catch (err) {
-        setShareOpen(true);
+        if (err.name !== "AbortError") {
+          setShareOpen(true);
+        }
       }
     }
   }
