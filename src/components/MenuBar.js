@@ -1,24 +1,29 @@
-import React, { createRef, useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { AppBar, IconButton, Toolbar, Typography } from '@mui/material';
-import { Calculate, FastForward, Help, Home, Lightbulb, Settings } from '@mui/icons-material';
+import { Calculate, Help, Home, Lightbulb, Settings, Share } from '@mui/icons-material';
 import HelpDialog from './HelpDialog';
 import SettingsDialog from './SettingsDialog';
 import SumDialog from './SumDialog';
 import TipsDialog from './TipsDialog';
+import ShareDialog from './ShareDialog';
+
+const shareData = {
+  title: "Sum Disks",
+  text: "Like number games? Try:",
+  url: "https://mh11wi.github.io/SumDisks/",
+};
+
+function isMobile() {
+  return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+}
 
 const MenuBar = (props) => {
-  const actionRef = createRef();
   const [helpOpen, setHelpOpen] = useState(true);
   const [tipsOpen, setTipsOpen] = useState(false);
   const [settingsOpen, setSettingsOpen] = useState(false);
   const [calculationsOpen, setCalculationsOpen] = useState(false);
   const [columnSums, setColumnSums] = useState(null);
-  
-  useEffect(() => {
-    if (props.hasWon) {
-      actionRef.current.focusVisible();
-    }
-  }, [actionRef, props.hasWon]);
+  const [shareOpen, setShareOpen] = useState(false);
   
   const handleClickHelp = () => {
     setHelpOpen(true);
@@ -51,6 +56,22 @@ const MenuBar = (props) => {
   
   const handleCloseCalculations = () => {
     setCalculationsOpen(false);
+  }
+  
+  const handleClickShare = async () => {
+    if (!isMobile()) {
+      setShareOpen(true);
+    } else {
+      try {
+        await navigator.share(shareData);
+      } catch (err) {
+        setShareOpen(true);
+      }
+    }
+  }
+  
+  const handleCloseShare = () => {
+    setShareOpen(false);
   }
   
   return (
@@ -103,9 +124,15 @@ const MenuBar = (props) => {
           setIncludeNegatives={props.setIncludeNegatives}
         />
         
-        <IconButton action={actionRef} aria-label="New Game" onClick={props.handleClickNewGame} color="inherit">
-          <FastForward />
+        <IconButton aria-label="Share" onClick={handleClickShare} color="inherit">
+          <Share />
         </IconButton>
+        <ShareDialog
+          open={shareOpen}
+          onClose={handleCloseShare}
+          data={shareData}
+        />
+        
         <IconButton aria-label="Home" href="https://mh11wi.github.io" color="inherit">
           <Home />
         </IconButton>

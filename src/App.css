@@ -16,8 +16,25 @@ html, body, #root, .App, .Main {
 
 .Game {
   margin: auto;
-  height: calc(100% - 3rem);
+  height: calc(100% - 5rem);
   width: 100%;
+}
+
+.newGameButton svg {
+  width: 1.25em;
+  height: 1.25em;
+}
+
+.shareOption {
+  margin-left: 0.5rem;
+  margin-right: 0.5rem;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+}
+
+.shareOption:hover:not(:active) {
+  opacity: 0.75;
 }
 
 .horizontal-ad {
@@ -35,6 +52,11 @@ html, body, #root, .App, .Main {
     height: calc(100% - 90px);
     min-height: calc(100% - 90px);
     max-height: calc(100% - 90px);
+  }
+  
+  .newGameButton {
+    bottom: calc(1rem + 90px);
+    right: 1.5rem;
   }
 }
 
@@ -65,6 +87,18 @@ html, body, #root, .App, .Main {
     padding: 0.5rem 0;
     height: calc(100% - 4rem);
   }
+  
+  .newGameButton {
+    width: 3rem !important;
+    height: 3rem !important;
+    bottom: 1rem;
+    right: calc(20% + 1.5rem);
+  }
+  
+  .newGameButton svg {
+    width: 1em;
+    height: 1em;
+  }
 }
 
 @media (orientation: landscape) and (max-width: 1200px) and (min-height: 600px) {
@@ -76,6 +110,11 @@ html, body, #root, .App, .Main {
     padding: 1rem 0;
     height: calc(100% - 5rem);
   }
+  
+  .newGameButton {
+    bottom: 1rem;
+    right: calc(17.5% + 1.5rem);
+  }
 }
 
 @media (orientation: landscape) and (min-width: 1200px) {
@@ -86,5 +125,10 @@ html, body, #root, .App, .Main {
   .Game {
     padding: 1rem 0;
     height: calc(100% - 5rem);
+  }
+  
+  .newGameButton {
+    bottom: 1rem;
+    right: calc(20% + 1.5rem);
   }
 }
