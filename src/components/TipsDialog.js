@@ -10,6 +10,7 @@ import {
   List,
   ListItem,
   ListItemAvatar,
+  ListItemIcon,
   ListItemText,
   Link,
   MobileStepper,
@@ -18,17 +19,30 @@ import {
 import {
   EmojiEmotions,
   EmojiEvents,
+  Facebook,
   KeyboardArrowLeft, 
   KeyboardArrowRight, 
   Lightbulb,
-  Quiz
+  Quiz,
+  ThumbUpAlt,
+  Twitter,
+  YouTube
 } from '@mui/icons-material';
 
 const steps = [
   {
     icon: ( <Lightbulb /> ),
     primary: 'Pro Tip',
-    secondary: 'Look for the biggest number as a starting point. Focus on this column and try to find other numbers in each disk that could work with it. Typically if there is one really big number in a column, the others will be small.'
+    secondary: 'Look for the biggest number as a starting point. Focus on this column and try to find other numbers in each disk that could work with it. Typically if there is one really big number in a column, the others will be relatively small.'
+  },
+  {
+    icon: ( <Quiz /> ),
+    primary: 'Did You Know?',
+    secondary: (
+      <Fragment>
+        I created a word variant to this game, where disks of letters can be rotated to form words. If you are also a fan of word games, please check out <Link href="https://mh11wi.github.io/WordDisks/" target="_blank">Word Disks</Link>!
+      </Fragment>
+    )
   },
   {
     icon: ( <EmojiEmotions /> ),
@@ -49,7 +63,7 @@ const steps = [
     primary: 'Did You Know?',
     secondary: (
       <Fragment>
-        I created a word variant to this game, where disks of letters can be rotated to form words. If you are also a fan of word games, please check out <Link href="https://mh11wi.github.io/WordDisks/" target="_blank">Word Disks</Link>!
+        The <Link href="https://opendyslexic.org/" target="_blank">OpenDyslexic</Link> font was chosen to make the disks easier to read, particularly when the numbers appear upside down. Each number has a weighted bottom to help distinguish 6 and 9, for instance.
       </Fragment>
     )
   },
@@ -57,6 +71,59 @@ const steps = [
     icon: ( <EmojiEvents /> ),
     primary: 'Keep Practicing',
     secondary: 'This game is a great way to exercise your mental math skills! Practice at your own pace, or if you are up for a challenge, try increasing the number of disks, numbers per disk, or sum of numbers.'
+  },
+  {
+    icon: ( <ThumbUpAlt /> ),
+    primary: "Let's Get Social!",
+    secondary: (
+      <Fragment>
+        Follow "Sum Disks" on social media for even more fun, and to receive updates about the game:
+        <List sx={{ px: 2, py: 0 }}>
+          <ListItem sx={{ py: 0 }}>
+            <ListItemIcon sx={{ minWidth: '2rem'}}>
+              <YouTube />
+            </ListItemIcon>
+            <ListItemText>
+              <Link 
+                href="https://youtube.com/@sumdisks" 
+                target="_blank" 
+                sx={{ fontSize: '0.9em'}}
+              >
+                youtube.com/@sumdisks
+              </Link>
+            </ListItemText>
+          </ListItem>
+          <ListItem sx={{ py: 0 }}>
+            <ListItemIcon sx={{ minWidth: '2rem'}}>
+              <Facebook />
+            </ListItemIcon>
+            <ListItemText sx={{ my: 0 }}>
+              <Link 
+                href="https://facebook.com/sumdisks" 
+                target="_blank"
+                sx={{ fontSize: '0.9em'}}
+              >
+                facebook.com/sumdisks
+              </Link>
+            </ListItemText>
+          </ListItem>
+          <ListItem sx={{ py: 0 }}>
+            <ListItemIcon sx={{ minWidth: '2rem'}}>
+              <Twitter />
+            </ListItemIcon>
+            <ListItemText>
+              <Link 
+                href="https://twitter.com/sumdisks" 
+                target="_blank"
+                sx={{ fontSize: '0.9em'}}
+              >
+                twitter.com/sumdisks
+              </Link>
+            </ListItemText>
+          </ListItem>
+        </List>
+      </Fragment>
+    )
   }
 ];
 
@@ -92,9 +159,10 @@ const TipsDialog = (props) => {
                   {steps[activeStep].icon}
                 </Avatar>
               </ListItemAvatar>
-              <ListItemText 
+              <ListItemText
                 primary={steps[activeStep].primary} 
                 secondary={steps[activeStep].secondary}
+                secondaryTypographyProps={{ component: "div" }}
               />
             </ListItem>
           </List>
