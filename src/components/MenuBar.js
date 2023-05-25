@@ -7,12 +7,6 @@ import SumDialog from './SumDialog';
 import TipsDialog from './TipsDialog';
 import ShareDialog from './ShareDialog';
 
-const shareData = {
-  title: "Sum Disks",
-  text: "Like number games? Try:",
-  url: "https://mh11wi.github.io/SumDisks/",
-};
-
 function isMobile() {
   return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
 }
@@ -24,6 +18,12 @@ const MenuBar = (props) => {
   const [calculationsOpen, setCalculationsOpen] = useState(false);
   const [columnSums, setColumnSums] = useState(null);
   const [shareOpen, setShareOpen] = useState(false);
+  
+  const shareData = {
+    title: "Sum Disks",
+    text: props.getQueryString() ? "Can you solve this puzzle?" : "Like number games? Try:",
+    url: "https://mh11wi.github.io/SumDisks" + props.getQueryString()
+  };
   
   const handleClickHelp = () => {
     setHelpOpen(true);

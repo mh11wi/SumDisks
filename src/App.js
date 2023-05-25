@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { green, pink } from '@mui/material/colors';
 import Box from '@mui/material/Box';
@@ -147,6 +147,7 @@ function newGame(sum, numberOfDisks, numbersPerDisk, includeNegatives) {
 }
 
 function App() {
+  const loadingRef = useRef(0);
   const [disksText, setDisksText] = useState(null);
   const [rotatedDisksText, setRotatedDisksText] = useState(null);
   const [sum, setSum] = useState(parseInt(localStorage.getItem('sd-sum')) || 100);
@@ -157,7 +158,62 @@ function App() {
   const { orientation, resizing } = useWindowOrientation();
   
   useEffect(() => {
-    const game = newGame(sum, numberOfDisks, numbersPerDisk, includeNegatives);
+    let game;
+    if (loadingRef.current < 2) {
+      const params = new URLSearchParams(window.location.search);
+      const urlDisks = params.get('disks');
+      const urlSum = parseInt(params.get('sum'));
+      
+      try {
+        if (!urlDisks) {
+          throw new Error('No game provided.');
+        }
+        
+        if (isNaN(urlSum) || (urlSum !== 10 && urlSum !== 20 && urlSum !== 50 && urlSum !== 100)) {
+          throw new Error('Invalid sum provided.');
+        }
+        
+        const disks = urlDisks.split('_');
+        if (disks.length < 3 || disks.length > 7) {
+          throw new Error('Invalid number of disks.');
+        }
+        
+        const numberOfColumns = disks[0].split('.').length;
+        if (numberOfColumns !== 2 &&  numberOfColumns !== 4 && numberOfColumns !== 6) {
+          throw new Error('Invalid numbers per disk.');
+        }
+        
+        game = disks.map((disk) => {
+          const columns = disk.split('.'); 
+          if (columns.length !== numberOfColumns) {
+            throw new Error('Inconsistent numbers per disk.');
+          }
+          
+          return columns.map((column) => {
+            const number = parseInt(column);
+            if (isNaN(number)) {
+              throw new Error('Invalid disk contents.');
+            }
+            return number;
+          });
+        });
+        
+        setSum(urlSum);
+        setNumberOfDisks(game.length);
+        setNumbersPerDisk(game[0].length);
+        setIncludeNegatives(urlDisks.includes('-'));
+      } catch (error) {
+        if (loadingRef.current === 0) {
+          console.log(`${error.message} Generating random game...`);
+        }
+      } finally {
+        loadingRef.current++;
+      }
+    }
+    
+    if (!game) {
+      game = newGame(sum, numberOfDisks, numbersPerDisk, includeNegatives);
+    }
     setDisksText(game);
     setRotatedDisksText(game);
     setHasWon(false);
@@ -221,6 +277,15 @@ function App() {
     return columnSums;
   }
   
+  const getQueryString = () => {
+    if (!disksText) {
+      return '';
+    }
+    
+    const disks = disksText.map((disk) => disk.join('.')).join('_');
+    return `?disks=${disks}&sum=${sum}`;
+  }
+  
   return (
     <div className="App">
       <ThemeProvider theme={theme}>
@@ -247,6 +312,7 @@ function App() {
             includeNegatives={includeNegatives}
             setIncludeNegatives={handleChangeIncludeNegatives}
             getColumnSums={getColumnSums}
+            getQueryString={getQueryString}
           />
           <Box className="Game">
             <ReactDisks 
