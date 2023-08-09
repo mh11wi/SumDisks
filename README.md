@@ -19,3 +19,5 @@ The following settings are configurable in the game:
 - number of disks
 
 - whether negative numbers should be included
+
+- on mobile touch devices, whether disks can be rotated via swipe gestures instead

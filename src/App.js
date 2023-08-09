@@ -146,6 +146,10 @@ function newGame(sum, numberOfDisks, numbersPerDisk, includeNegatives) {
   return disksText;
 }
 
+function isTouchDevice() {
+  return ('ontouchstart' in window)
+}
+
 function App() {
   const loadingRef = useRef(0);
   const [disksText, setDisksText] = useState(null);
@@ -154,6 +158,9 @@ function App() {
   const [numberOfDisks, setNumberOfDisks] = useState(parseInt(localStorage.getItem('sd-numberOfDisks')) || 3);
   const [numbersPerDisk, setNumbersPerDisk] = useState(parseInt(localStorage.getItem('sd-numbersPerDisk')) || 4);
   const [includeNegatives, setIncludeNegatives] = useState(localStorage.getItem('sd-includeNegatives') === 'true');
+  const [useSwipeMode, setUseSwipeMode] = useState(
+    localStorage.getItem('sd-useSwipeMode') ? localStorage.getItem('sd-useSwipeMode') === 'true' : isTouchDevice()
+  );
   const [hasWon, setHasWon] = useState(false);
   const { orientation, resizing } = useWindowOrientation();
   
@@ -265,6 +272,11 @@ function App() {
     localStorage.setItem('sd-includeNegatives', val);
   }
   
+  const handleChangeUseSwipeMode = (val) => {
+    setUseSwipeMode(val);
+    localStorage.setItem('sd-useSwipeMode', val);
+  }
+  
   const getColumnSums = () => {
     const columnSums = [];
     const numberMatrix = transpose(rotatedDisksText);
@@ -311,6 +323,8 @@ function App() {
             setNumbersPerDisk={handleChangeNumbersPerDisk}
             includeNegatives={includeNegatives}
             setIncludeNegatives={handleChangeIncludeNegatives}
+            useSwipeMode={useSwipeMode}
+            setUseSwipeMode={handleChangeUseSwipeMode}
             getColumnSums={getColumnSums}
             getQueryString={getQueryString}
           />
@@ -320,6 +334,7 @@ function App() {
               theme={theme.palette.primary}
               onRotate={debounce(onRotate, 500)}
               disabled={hasWon}
+              swipeMode={useSwipeMode}
             />
             <NewGameButton handleClick={handleClickNewGame} doTransition={!resizing} doPulsate={hasWon} />
           </Box>

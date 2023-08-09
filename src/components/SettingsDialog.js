@@ -32,6 +32,10 @@ const disksMarks = [
   { value: 7, label: '7' },
 ];
 
+function isTouchDevice() {
+  return ('ontouchstart' in window)
+}
+
 const SettingsDialog = (props) => {
   const onSumChange = (event, newValue) => {
     props.setSum(newValue);
@@ -47,6 +51,10 @@ const SettingsDialog = (props) => {
   
   const onNegativesChange = (event, newValue) => {
     props.setIncludeNegatives(newValue);
+  }
+  
+  const onSwipeModeChange = (event, newValue) => {
+    props.setUseSwipeMode(newValue);
   }
   
   return (
@@ -112,6 +120,18 @@ const SettingsDialog = (props) => {
             onChange={onNegativesChange}
           />
         </DialogContentText>
+        {isTouchDevice() && 
+          <DialogContentText component="div" sx={{ pt: 2 }}>
+            <Typography id="swipe-mode-switch">
+              Swipe to rotate
+            </Typography>
+            <Switch
+              inputProps={{ 'aria-labelledby': 'swipe-mode-switch' }}
+              checked={props.useSwipeMode}
+              onChange={onSwipeModeChange}
+            />
+          </DialogContentText>
+        }
       </DialogContent>
       <DialogActions>
         <Button onClick={props.onClose}>Close</Button>

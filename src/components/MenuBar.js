@@ -86,6 +86,7 @@ const MenuBar = (props) => {
           open={helpOpen}
           onClose={handleCloseHelp}
           sum={props.sum}
+          useSwipeMode={props.useSwipeMode}
         />
         
         <IconButton aria-label="Tips" onClick={handleClickTips} color="inherit">
@@ -124,6 +125,8 @@ const MenuBar = (props) => {
           setNumbersPerDisk={props.setNumbersPerDisk}
           includeNegatives={props.includeNegatives}
           setIncludeNegatives={props.setIncludeNegatives}
+          useSwipeMode={props.useSwipeMode}
+          setUseSwipeMode={props.setUseSwipeMode}
         />
         
         <IconButton aria-label="Share" onClick={handleClickShare} color="inherit">

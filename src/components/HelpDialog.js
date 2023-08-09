@@ -24,6 +24,13 @@ import {
 } from '@mui/icons-material';
 
 const HelpDialog = (props) => {
+  let instructions;
+  if (props.useSwipeMode) {
+    instructions = "You can rotate a disk by tapping on it, and then swiping left or right anywhere on the screen.";
+  } else {
+    instructions = "You can rotate a disk by clicking on it, and then clicking either the clockwise or counterclockwise arrows that appear.";
+  }
+  
   return (
     <Dialog
       aria-labelledby="help-dialog-title"
@@ -44,9 +51,7 @@ const HelpDialog = (props) => {
             </ListItem>
             
             <ListItem>
-              <ListItemText>
-                You can rotate a disk by clicking on it, and then clicking either the clockwise or counterclockwise arrows that appear.
-              </ListItemText>
+              <ListItemText>{ instructions }</ListItemText>
             </ListItem>
           </List>
           
