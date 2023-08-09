@@ -150,8 +150,8 @@ function App() {
   const loadingRef = useRef(0);
   const [disksText, setDisksText] = useState(null);
   const [rotatedDisksText, setRotatedDisksText] = useState(null);
-  const [sum, setSum] = useState(parseInt(localStorage.getItem('sd-sum')) || 100);
-  const [numberOfDisks, setNumberOfDisks] = useState(parseInt(localStorage.getItem('sd-numberOfDisks')) || 4);
+  const [sum, setSum] = useState(parseInt(localStorage.getItem('sd-sum')) || 10);
+  const [numberOfDisks, setNumberOfDisks] = useState(parseInt(localStorage.getItem('sd-numberOfDisks')) || 3);
   const [numbersPerDisk, setNumbersPerDisk] = useState(parseInt(localStorage.getItem('sd-numbersPerDisk')) || 4);
   const [includeNegatives, setIncludeNegatives] = useState(localStorage.getItem('sd-includeNegatives') === 'true');
   const [hasWon, setHasWon] = useState(false);

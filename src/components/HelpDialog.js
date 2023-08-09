@@ -34,7 +34,7 @@ const HelpDialog = (props) => {
       onClose={props.onClose}
     >
       <DialogTitle id="help-dialog-title">How To Play</DialogTitle>
-      <DialogContent id="help-dialog-content" dividers={true} sx={{ p: 0, maxHeight: '475px' }}>
+      <DialogContent id="help-dialog-content" dividers={true} sx={{ p: 0, maxHeight: '70dvh' }}>
         <DialogContentText component="div">
           <List>
             <ListItem>
