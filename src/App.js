@@ -169,15 +169,10 @@ function App() {
     if (loadingRef.current < 2) {
       const params = new URLSearchParams(window.location.search);
       const urlDisks = params.get('disks');
-      const urlSum = parseInt(params.get('sum'));
       
       try {
         if (!urlDisks) {
           throw new Error('No game provided.');
-        }
-        
-        if (isNaN(urlSum) || (urlSum !== 10 && urlSum !== 20 && urlSum !== 50 && urlSum !== 100)) {
-          throw new Error('Invalid sum provided.');
         }
         
         const disks = urlDisks.split('_');
@@ -190,20 +185,30 @@ function App() {
           throw new Error('Invalid numbers per disk.');
         }
         
+        let urlSum = 0;
         game = disks.map((disk) => {
           const columns = disk.split('.'); 
           if (columns.length !== numberOfColumns) {
             throw new Error('Inconsistent numbers per disk.');
           }
           
-          return columns.map((column) => {
+          const numbers = columns.map((column) => {
             const number = parseInt(column);
             if (isNaN(number)) {
               throw new Error('Invalid disk contents.');
             }
             return number;
           });
+          
+          urlSum += getSum(numbers);
+          
+          return numbers;
         });
+        
+        urlSum = urlSum / game[0].length;
+        if (urlSum !== 10 && urlSum !== 20 && urlSum !== 50 && urlSum !== 100) {
+          throw new Error('Invalid target sum.');
+        }
         
         setSum(urlSum);
         setNumberOfDisks(game.length);
@@ -213,6 +218,7 @@ function App() {
         if (loadingRef.current === 0) {
           console.log(`${error.message} Generating random game...`);
         }
+        game = null;
       } finally {
         loadingRef.current++;
       }
@@ -295,7 +301,7 @@ function App() {
     }
     
     const disks = disksText.map((disk) => disk.join('.')).join('_');
-    return `?disks=${disks}&sum=${sum}`;
+    return `?disks=${disks}`;
   }
   
   return (
