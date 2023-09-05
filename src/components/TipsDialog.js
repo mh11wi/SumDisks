@@ -10,7 +10,6 @@ import {
   List,
   ListItem,
   ListItemAvatar,
-  ListItemIcon,
   ListItemText,
   Link,
   MobileStepper,
@@ -19,14 +18,10 @@ import {
 import {
   EmojiEmotions,
   EmojiEvents,
-  Facebook,
   KeyboardArrowLeft, 
   KeyboardArrowRight, 
   Lightbulb,
-  Quiz,
-  ThumbUpAlt,
-  Twitter,
-  YouTube
+  Quiz
 } from '@mui/icons-material';
 
 const steps = [
@@ -71,59 +66,6 @@ const steps = [
     icon: ( <EmojiEvents /> ),
     primary: 'Keep Practicing',
     secondary: 'This game is a great way to exercise your mental math skills! Practice at your own pace, or if you are up for a challenge, try increasing the number of disks, numbers per disk, or sum of numbers.'
-  },
-  {
-    icon: ( <ThumbUpAlt /> ),
-    primary: "Let's Get Social!",
-    secondary: (
-      <Fragment>
-        Follow "Sum Disks" on social media for even more fun, and to receive updates about the game:
-        <List sx={{ px: 2, py: 0 }}>
-          <ListItem sx={{ py: 0 }}>
-            <ListItemIcon sx={{ minWidth: '2rem'}}>
-              <YouTube />
-            </ListItemIcon>
-            <ListItemText>
-              <Link 
-                href="https://youtube.com/@sumdisks" 
-                target="_blank" 
-                sx={{ fontSize: '0.9em'}}
-              >
-                youtube.com/@sumdisks
-              </Link>
-            </ListItemText>
-          </ListItem>
-          <ListItem sx={{ py: 0 }}>
-            <ListItemIcon sx={{ minWidth: '2rem'}}>
-              <Facebook />
-            </ListItemIcon>
-            <ListItemText sx={{ my: 0 }}>
-              <Link 
-                href="https://facebook.com/sumdisks" 
-                target="_blank"
-                sx={{ fontSize: '0.9em'}}
-              >
-                facebook.com/sumdisks
-              </Link>
-            </ListItemText>
-          </ListItem>
-          <ListItem sx={{ py: 0 }}>
-            <ListItemIcon sx={{ minWidth: '2rem'}}>
-              <Twitter />
-            </ListItemIcon>
-            <ListItemText>
-              <Link 
-                href="https://twitter.com/sumdisks" 
-                target="_blank"
-                sx={{ fontSize: '0.9em'}}
-              >
-                twitter.com/sumdisks
-              </Link>
-            </ListItemText>
-          </ListItem>
-        </List>
-      </Fragment>
-    )
   }
 ];
 

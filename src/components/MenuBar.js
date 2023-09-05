@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { AppBar, IconButton, Toolbar, Typography } from '@mui/material';
-import { Calculate, Help, Home, Lightbulb, Settings, Share } from '@mui/icons-material';
+import { Calculate, Help, Menu, Settings } from '@mui/icons-material';
+import MainMenu from './MainMenu';
 import HelpDialog from './HelpDialog';
 import SettingsDialog from './SettingsDialog';
 import SumDialog from './SumDialog';
@@ -12,6 +13,7 @@ function isMobile() {
 }
 
 const MenuBar = (props) => {
+  const [menuOpen, setMenuOpen] = useState(false);
   const [helpOpen, setHelpOpen] = useState(true);
   const [tipsOpen, setTipsOpen] = useState(false);
   const [settingsOpen, setSettingsOpen] = useState(false);
@@ -24,6 +26,14 @@ const MenuBar = (props) => {
     text: props.getQueryString() ? "Can you solve this puzzle?" : "Like number games? Try:",
     url: "https://mh11wi.github.io/SumDisks" + props.getQueryString()
   };
+  
+  const handleClickMenu = () => {
+    setMenuOpen(true);
+  }
+  
+  const handleCloseMenu = () => {
+    setMenuOpen(false);
+  }
   
   const handleClickHelp = () => {
     setHelpOpen(true);
@@ -79,6 +89,19 @@ const MenuBar = (props) => {
   return (
     <AppBar position="relative">
       <Toolbar variant="dense">
+        <IconButton aria-label="Menu" onClick={handleClickMenu} color="inherit">
+          <Menu />
+        </IconButton>
+        <MainMenu
+          open={menuOpen}
+          onClose={handleCloseMenu}
+          handleClickHelp={handleClickHelp}
+          handleClickTips={handleClickTips}
+          handleClickCalculations={handleClickCalculations}
+          handleClickShare={handleClickShare}
+          handleClickSettings={handleClickSettings}
+        />
+        
         <IconButton aria-label="Help" onClick={handleClickHelp} color="inherit">
           <Help />
         </IconButton>
@@ -89,13 +112,9 @@ const MenuBar = (props) => {
           useSwipeMode={props.useSwipeMode}
         />
         
-        <IconButton aria-label="Tips" onClick={handleClickTips} color="inherit">
-          <Lightbulb />
-        </IconButton>
-        <TipsDialog
-          open={tipsOpen}
-          onClose={handleCloseTips}
-        />
+        <Typography variant="h5" component="h1" align="center" sx={{ fontWeight: 500, flexGrow: 1 }}>
+          Sum Disks
+        </Typography>
         
         <IconButton aria-label="Calculations" onClick={handleClickCalculations} color="inherit">
           <Calculate />
@@ -106,10 +125,6 @@ const MenuBar = (props) => {
           data={columnSums}
           sum={props.sum}
         />
-        
-        <Typography variant="h5" component="h1" align="center" sx={{ fontWeight: 500, flexGrow: 1 }}>
-          Sum Disks
-        </Typography>
         
         <IconButton aria-label="Settings" onClick={handleClickSettings} color="inherit">
           <Settings />
@@ -129,18 +144,17 @@ const MenuBar = (props) => {
           setUseSwipeMode={props.setUseSwipeMode}
         />
         
-        <IconButton aria-label="Share" onClick={handleClickShare} color="inherit">
-          <Share />
-        </IconButton>
+        {/* Dialogs where icon only in MainMenu: */}
+        <TipsDialog
+          open={tipsOpen}
+          onClose={handleCloseTips}
+        />
+        
         <ShareDialog
           open={shareOpen}
           onClose={handleCloseShare}
           data={shareData}
         />
-        
-        <IconButton aria-label="Home" href="https://mh11wi.github.io" color="inherit">
-          <Home />
-        </IconButton>
       </Toolbar>
     </AppBar>
   );
