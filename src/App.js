@@ -250,6 +250,12 @@ function App() {
     window.adBreak({
       type: 'next',
       name: 'new-game',
+      beforeAd: () => {
+        document.querySelectorAll('.adsbygoogle[data-slotcar-interstitial="true"], .adsbygoogle[data-slotcar-interstitial="true"] *').forEach(function(el) {
+          el.style.width = "100dvw";
+          el.style.height = "100dvh";
+        });
+      }
     });
 
     const game = newGame(sum, numberOfDisks, numbersPerDisk, includeNegatives);
