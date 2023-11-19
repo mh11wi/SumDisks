@@ -3,6 +3,7 @@
   "author": "Madeleine Hill <mh11wi@outlook.com> (https://mh11wi.github.io)",
   "version": "1.0.0",
   "private": true,
+  "type": "module",
   "homepage": "http://mh11wi.github.io/SumDisks",
   "dependencies": {
     "@emotion/react": "^11.10.5",
@@ -20,46 +21,25 @@
     "react-dom": "^18.2.0",
     "react-share": "^4.4.1"
   },
-  "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test --watchAll=false",
-    "eject": "react-scripts eject",
-    "predeploy": "npm run build",
-    "deploy": "gh-pages -d build"
-  },
-  "eslintConfig": {
-    "extends": [
-      "react-app",
-      "react-app/jest"
-    ]
-  },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
-  },
   "devDependencies": {
-    "@svgr/webpack": "^6.5.1",
+    "@types/react": "^18.2.37",
+    "@types/react-dom": "^18.2.15",
+    "@vitejs/plugin-react": "^4.2.0",
+    "eslint": "^8.53.0",
+    "eslint-plugin-react": "^7.33.2",
+    "eslint-plugin-react-hooks": "^4.6.0",
+    "eslint-plugin-react-refresh": "^0.4.4",
     "gh-pages": "^4.0.0",
-    "react-scripts": "5.0.1"
+    "jsdom": "^22.1.0",
+    "vite": "^5.0.0",
+    "vitest": "^0.34.6"
   },
-  "overrides": {
-    "@svgr/webpack": "$@svgr/webpack"
-  },
-  "jest": {
-    "transform": {
-      "^.+\\.[t|j]sx?$": "babel-jest"
-    },
-    "transformIgnorePatterns": [
-      "node_modules/(?!@react-disks)/"
-    ]
+  "scripts": {
+    "dev": "vite --host --port 3000",
+    "build": "vite build",
+    "test": "vitest",
+    "preview": "vite preview --host --port 3000",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d dist"
   }
 }
