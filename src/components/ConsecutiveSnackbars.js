@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Alert, AlertTitle, Snackbar, IconButton } from '@mui/material';
+import { Alert, Snackbar, IconButton } from '@mui/material';
 
 const ConsecutiveSnackbars = (props) => {
   const [open, setOpen] = React.useState(false);
