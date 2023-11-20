@@ -123,8 +123,8 @@ html, body, #root, .App, .Main {
   }
   
   .Game {
-    padding: 1rem 0;
-    height: calc(100% - 5rem);
+    padding: 1.5rem 0;
+    height: calc(100% - 6rem);
   }
   
   .newGameButton {

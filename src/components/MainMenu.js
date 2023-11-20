@@ -1,6 +1,6 @@
 import React from 'react';
 import { Box, Drawer, Link, List, ListItem, ListItemButton, ListItemIcon, ListItemText } from '@mui/material';
-import { Calculate, Facebook, Help, Home, Lightbulb, Settings, Share, Twitter, YouTube } from '@mui/icons-material';
+import { Calculate, Facebook, Help, Home, Leaderboard, Lightbulb, Settings, Share, Twitter, YouTube } from '@mui/icons-material';
 
 const MainMenu = (props) => {
   const handleClickHelp = () => {
@@ -26,6 +26,11 @@ const MainMenu = (props) => {
   const handleClickShare = async () => {
     props.onClose();
     await props.handleClickShare();
+  }
+  
+  const handleClickStatistics = () => {
+    props.onClose();
+    props.handleClickStatistics();
   }
   
   return (
@@ -58,6 +63,13 @@ const MainMenu = (props) => {
             <ListItemText>Tips & Tidbits</ListItemText>
           </ListItemButton>
           
+          <ListItemButton onClick={handleClickStatistics}>
+            <ListItemIcon>
+              <Leaderboard />
+            </ListItemIcon>
+            <ListItemText>Stats & Achievements</ListItemText>
+          </ListItemButton>
+          
           <ListItemButton onClick={handleClickCalculations}>
             <ListItemIcon>
               <Calculate />
@@ -85,7 +97,6 @@ const MainMenu = (props) => {
                   <Home />
                 </ListItemIcon>
                 <ListItemText>Home</ListItemText>
-            
             </ListItemButton>
           </Link>
         </List>

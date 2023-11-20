@@ -7,6 +7,7 @@ import SettingsDialog from './SettingsDialog';
 import SumDialog from './SumDialog';
 import TipsDialog from './TipsDialog';
 import ShareDialog from './ShareDialog';
+import StatisticsDialog from './StatisticsDialog';
 
 function isMobile() {
   return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
@@ -20,6 +21,7 @@ const MenuBar = (props) => {
   const [calculationsOpen, setCalculationsOpen] = useState(false);
   const [columnSums, setColumnSums] = useState(null);
   const [shareOpen, setShareOpen] = useState(false);
+  const [statisticsOpen, setStatisticsOpen] = useState(false);
   
   const shareData = {
     title: "Sum Disks",
@@ -86,6 +88,14 @@ const MenuBar = (props) => {
     setShareOpen(false);
   }
   
+  const handleClickStatistics = () => {
+    setStatisticsOpen(true);
+  }
+  
+  const handleCloseStatistics = () => {
+    setStatisticsOpen(false);
+  }
+  
   return (
     <AppBar position="relative">
       <Toolbar variant="dense">
@@ -100,6 +110,7 @@ const MenuBar = (props) => {
           handleClickCalculations={handleClickCalculations}
           handleClickShare={handleClickShare}
           handleClickSettings={handleClickSettings}
+          handleClickStatistics={handleClickStatistics}
         />
         
         <IconButton aria-label="Help" onClick={handleClickHelp} color="inherit">
@@ -154,6 +165,12 @@ const MenuBar = (props) => {
           open={shareOpen}
           onClose={handleCloseShare}
           data={shareData}
+        />
+        
+        <StatisticsDialog
+          open={statisticsOpen}
+          onClose={handleCloseStatistics}
+          unlimitedStats={props.unlimitedStats}
         />
       </Toolbar>
     </AppBar>

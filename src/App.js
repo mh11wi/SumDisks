@@ -1,12 +1,13 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { green, pink } from '@mui/material/colors';
+import { green, grey, pink } from '@mui/material/colors';
 import Box from '@mui/material/Box';
 import party from 'party-js';
 import AdSense from 'react-adsense';
 import ReactDisks from 'react-disks';
 import MenuBar from './components/MenuBar';
 import NewGameButton from './components/NewGameButton';
+import ConsecutiveSnackbars from './components/ConsecutiveSnackbars';
 import useWindowOrientation from './hooks/useWindowOrientation';
 import '@fontsource/roboto/300.css';
 import '@fontsource/roboto/400.css';
@@ -17,14 +18,19 @@ import './App.css';
 const theme = createTheme({
   palette: {
     primary: {
-      main: pink[500],
       light: pink[100],
+      main: pink[500],
       dark: pink[800]
+    },
+    secondary: {
+      light: grey[50],
+      main: grey[300],
+      dark: grey[700]
     },
     success: {
       light: green[50],
-      main: green[500],
-      dark: green[900]
+      main: green[300],
+      dark: green[700]
     },
   }
 });
@@ -161,7 +167,15 @@ function App() {
   const [useSwipeMode, setUseSwipeMode] = useState(
     localStorage.getItem('sd-useSwipeMode') ? localStorage.getItem('sd-useSwipeMode') === 'true' : isTouchDevice()
   );
+  const [unlimitedStats, setUnlimitedStats] = useState([
+    parseInt(localStorage.getItem('sd-unlimitedStats-3')) || 0,
+    parseInt(localStorage.getItem('sd-unlimitedStats-4')) || 0,
+    parseInt(localStorage.getItem('sd-unlimitedStats-5')) || 0,
+    parseInt(localStorage.getItem('sd-unlimitedStats-6')) || 0,
+    parseInt(localStorage.getItem('sd-unlimitedStats-7')) || 0
+  ]);
   const [hasWon, setHasWon] = useState(false);
+  const [snackPack, setSnackPack] = useState([]);
   const { orientation, resizing } = useWindowOrientation();
   
   useEffect(() => {
@@ -238,6 +252,7 @@ function App() {
       party.confetti(element, {
         count: party.variation.range(50, 70),
       });
+      updateUnlimitedStats();
     }
   }, [hasWon]);
   
@@ -294,6 +309,23 @@ function App() {
     localStorage.setItem('sd-useSwipeMode', val);
   }
   
+  const updateUnlimitedStats = () => {
+    const newStats = unlimitedStats.slice();
+    const unlimitedWins = getSum(newStats) + 1;
+    const achievementThresholds = [1, 10, 20, 50, 100, 200];
+    
+    const val = ++newStats[numberOfDisks - 3];
+    setUnlimitedStats(newStats);
+    localStorage.setItem('sd-unlimitedStats-' + numberOfDisks, val);
+    
+    if (achievementThresholds.includes(unlimitedWins)) {
+      setSnackPack((prev) => [...prev, { 
+        message: `Win ${unlimitedWins} game${unlimitedWins == 1 ? '' : 's'}`, 
+        key: new Date().getTime() 
+      }]);
+    }
+  }
+  
   const getColumnSums = () => {
     const columnSums = [];
     const numberMatrix = transpose(rotatedDisksText);
@@ -344,6 +376,7 @@ function App() {
             setUseSwipeMode={handleChangeUseSwipeMode}
             getColumnSums={getColumnSums}
             getQueryString={getQueryString}
+            unlimitedStats={unlimitedStats}
           />
           <Box className="Game">
             <ReactDisks 
@@ -354,6 +387,7 @@ function App() {
               swipeMode={useSwipeMode}
             />
             <NewGameButton handleClick={handleClickNewGame} doTransition={!resizing} doPulsate={hasWon} />
+            <ConsecutiveSnackbars snackPack={snackPack} setSnackPack={setSnackPack} />
           </Box>
         </Box>
         {orientation === 'landscape' && !resizing && 
