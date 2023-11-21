@@ -2,6 +2,7 @@ import { defineConfig, transformWithEsbuild } from 'vite'
 import react from '@vitejs/plugin-react'
 
 export default defineConfig({
+  base: "https://mh11wi.github.io/SumDisks/",
   plugins: [
     {
       name: 'treat-js-files-as-jsx',
