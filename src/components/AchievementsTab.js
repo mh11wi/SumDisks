@@ -16,6 +16,17 @@ const AchievementsTab = (props) => {
       >
         Win 1 game
       </Alert>
+      
+      <Alert 
+        variant="filled" 
+        severity="success"
+        color={unlimitedWins < 5 ? "secondary" : ""}
+        icon={unlimitedWins < 5 ? <RadioButtonUncheckedIcon fontSize="inherit" /> : ""}
+        sx={{ mb: 1 }}
+      >
+        Win 5 games
+      </Alert>
+      
       <Alert 
         variant="filled" 
         severity="success"
@@ -25,6 +36,7 @@ const AchievementsTab = (props) => {
       >
         Win 10 games
       </Alert>
+      
       <Alert 
         variant="filled" 
         severity="success"
@@ -34,6 +46,7 @@ const AchievementsTab = (props) => {
       >
         Win 20 games
       </Alert>
+      
       <Alert 
         variant="filled" 
         severity="success"
@@ -43,6 +56,7 @@ const AchievementsTab = (props) => {
       >
         Win 50 games
       </Alert>
+      
       <Alert 
         variant="filled" 
         severity="success"
@@ -51,15 +65,6 @@ const AchievementsTab = (props) => {
         sx={{ mb: 1 }}
       >
         Win 100 games
-      </Alert>
-      <Alert 
-        variant="filled" 
-        severity="success"
-        color={unlimitedWins < 200 ? "secondary" : ""}
-        icon={unlimitedWins < 200 ? <RadioButtonUncheckedIcon fontSize="inherit" /> : ""}
-        sx={{ mb: 1 }}
-      >
-        Win 200 games
       </Alert>
     </Box>
   );

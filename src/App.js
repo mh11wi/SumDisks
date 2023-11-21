@@ -312,15 +312,27 @@ function App() {
   const updateUnlimitedStats = () => {
     const newStats = unlimitedStats.slice();
     const unlimitedWins = getSum(newStats) + 1;
-    const achievementThresholds = [1, 10, 20, 50, 100, 200];
+    const achievementThresholds = [1, 5, 10, 20, 50, 100];
     
     const val = ++newStats[numberOfDisks - 3];
     setUnlimitedStats(newStats);
     localStorage.setItem('sd-unlimitedStats-' + numberOfDisks, val);
     
     if (achievementThresholds.includes(unlimitedWins)) {
+      let message = `Win ${unlimitedWins} game${unlimitedWins == 1 ? '' : 's'}`;
+      if (unlimitedWins == 1) {
+        message += " - Nicely done!";
+      } else if (
+        unlimitedWins == 5 && 
+        localStorage.getItem('sd-numberOfDisks') == null && 
+        localStorage.getItem('sd-numbersPerDisk') == null &&
+        localStorage.getItem('sd-includeNegatives') == null
+      ) {
+        message += " - Impressive! Care to up the difficulty?";
+      }
+      
       setSnackPack((prev) => [...prev, { 
-        message: `Win ${unlimitedWins} game${unlimitedWins == 1 ? '' : 's'}`, 
+        message: message, 
         key: new Date().getTime() 
       }]);
     }
