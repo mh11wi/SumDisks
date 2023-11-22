@@ -36,9 +36,9 @@ const ConsecutiveSnackbars = (props) => {
       onClose={handleClose}
       TransitionProps={{ onExited: handleExited }}
       anchorOrigin={{ vertical: "top", horizontal: "center" }}
-      sx={{ top: "0 !important", mt: "4rem" }}
+      sx={{ top: "0 !important", mt: "4rem", zIndex: 100, width: "95%", left: "2.5%", right: "2.5%" }}
     >
-      <Alert variant="filled" severity="success" onClose={handleClose} sx={{ width: 'fit-content' }}>
+      <Alert variant="filled" severity="success" onClose={handleClose} sx={{ width: "fit-content" }}>
         {messageInfo ? messageInfo.message : undefined}
       </Alert>
     </Snackbar>
