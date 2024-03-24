@@ -1,6 +1,26 @@
-import React from 'react';
-import { Box, Drawer, Link, List, ListItem, ListItemButton, ListItemIcon, ListItemText } from '@mui/material';
-import { Calculate, Facebook, Help, Home, Leaderboard, Lightbulb, Settings, Share, Twitter, YouTube } from '@mui/icons-material';
+import { 
+  Box, 
+  Drawer, 
+  Link, 
+  List, 
+  ListItem, 
+  ListItemButton, 
+  ListItemIcon, 
+  ListItemText 
+} from '@mui/material';
+import { 
+  Calculate, 
+  Facebook, 
+  Help, 
+  Home, 
+  Leaderboard, 
+  Lightbulb, 
+  Settings, 
+  Share, 
+  Twitter, 
+  YouTube 
+} from '@mui/icons-material';
+
 
 const MainMenu = (props) => {
   const handleClickHelp = () => {

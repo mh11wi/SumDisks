@@ -1,4 +1,4 @@
-import React from 'react';
+import { forwardRef, useContext, useImperativeHandle, useState } from 'react';
 import { useTheme } from '@mui/material/styles';
 import {
   Button,
@@ -14,10 +14,32 @@ import {
   TableHead, 
   TableRow 
 } from '@mui/material';
+import { getSum, transpose } from 'helpers/game';
+import { GameContext } from 'src/App';
 
 
-const SumDialog = (props) => {
+const CalculationsDialog = forwardRef((props, ref) => {
   const theme = useTheme();
+  const { targetSum, rotatedDisksText } = useContext(GameContext);
+  const [data, setData] = useState(null);
+  
+  useImperativeHandle(ref, () => {
+    return {
+      updateData() {
+        const columnSums = [];
+        const numberMatrix = transpose(rotatedDisksText);
+        for (let i=0; i < numberMatrix.length; i++) {
+          columnSums.push({
+            calculation: numberMatrix[i].join(' + '),
+            sum: getSum(numberMatrix[i])
+          });
+        }
+        
+        setData(columnSums);
+      },
+    };
+  }, [rotatedDisksText]);
+  
   return (
     <Dialog
       aria-labelledby="sum-dialog-title"
@@ -29,7 +51,7 @@ const SumDialog = (props) => {
     >
       <DialogTitle id="sum-dialog-title">Calculations</DialogTitle>
       <DialogContent id="sum-dialog-content" dividers={true}>
-        {props.data &&
+        {data &&
           <TableContainer component={Paper}>
             <Table aria-label="Table of Sums" align="center">
               <TableHead sx={{ backgroundColor: theme.palette.action.hover }}>
@@ -40,11 +62,11 @@ const SumDialog = (props) => {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {props.data.map((row, index) => {
+                {data.map((row, index) => {
                   let symbol;
-                  if (row.sum < props.sum) {
+                  if (row.sum < targetSum) {
                     symbol = { icon: '▼', label: 'Too Low' };
-                  } else if (row.sum > props.sum) {
+                  } else if (row.sum > targetSum) {
                     symbol = { icon: '▲', label: 'Too High' };
                   } else {
                     symbol = { icon: '✓', label: 'Correct' };
@@ -55,8 +77,8 @@ const SumDialog = (props) => {
                       key={index}
                       sx={{
                         '&:last-child td, &:last-child th': { border: 0 },
-                        backgroundColor: props.sum === row.sum ? theme.palette.success.light : 'inherit',
-                        td: { color: props.sum === row.sum ? theme.palette.success.dark : 'inherit' }
+                        backgroundColor: targetSum === row.sum ? theme.palette.success.light : 'inherit',
+                        td: { color: targetSum === row.sum ? theme.palette.success.dark : 'inherit' }
                       }}
                     >
                       <TableCell>{index + 1}</TableCell>
@@ -76,6 +98,6 @@ const SumDialog = (props) => {
       </DialogActions>
     </Dialog>
   );
-};
+});
 
-export default SumDialog;
+export default CalculationsDialog;

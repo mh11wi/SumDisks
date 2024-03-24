@@ -1,11 +1,12 @@
-import * as React from 'react';
+import { useEffect, useState } from 'react';
 import { Alert, Snackbar, IconButton } from '@mui/material';
 
-const ConsecutiveSnackbars = (props) => {
-  const [open, setOpen] = React.useState(false);
-  const [messageInfo, setMessageInfo] = React.useState(undefined);
 
-  React.useEffect(() => {
+const ConsecutiveSnackbars = (props) => {
+  const [open, setOpen] = useState(false);
+  const [messageInfo, setMessageInfo] = useState(undefined);
+
+  useEffect(() => {
     if (props.snackPack.length && !messageInfo) {
       // Set a new snack when we don't have an active one
       setMessageInfo({ ...props.snackPack[0] });

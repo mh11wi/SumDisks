@@ -1,9 +1,7 @@
-import React from 'react';
 import { useTheme } from '@mui/material/styles';
 import { Fab, Zoom }  from '@mui/material';
 import FastForwardIcon from '@mui/icons-material/FastForward';
 import { keyframes } from '@mui/system';
-
 
 
 const NewGameButton = (props) => {

@@ -1,19 +1,19 @@
-import React, { useEffect, useRef, useState } from 'react';
+import { createContext, useEffect, useRef, useState } from 'react';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { green, grey, pink } from '@mui/material/colors';
 import Box from '@mui/material/Box';
-import party from 'party-js';
 import AdSense from 'react-adsense';
-import ReactDisks from 'react-disks';
-import MenuBar from './components/MenuBar';
-import NewGameButton from './components/NewGameButton';
-import ConsecutiveSnackbars from './components/ConsecutiveSnackbars';
-import useWindowOrientation from './hooks/useWindowOrientation';
+import MenuBar from 'components/menu/MenuBar';
+import UnlimitedMode from 'components/game/modes/unlimited/UnlimitedMode';
+import useWindowOrientation from 'hooks/useWindowOrientation';
+import { isTouchDevice } from 'helpers/app';
+import { getSum } from 'helpers/game';
 import '@fontsource/roboto/300.css';
 import '@fontsource/roboto/400.css';
 import '@fontsource/roboto/500.css';
 import '@fontsource/roboto/700.css';
-import './App.css';
+import 'src/App.css';
+
 
 const theme = createTheme({
   palette: {
@@ -42,131 +42,27 @@ const adStyle = {
   margin: '0.5rem'
 };
 
-function debounce(func, timeout) {
-  let timer;
-  return function(event) {
-    if (timer) {
-      clearTimeout(timer);
-    }
-    timer = setTimeout(func, timeout, event);
-  };
-}
-
-function getRandomInt(min, max) {
-  min = Math.ceil(min);
-  max = Math.floor(max);
-  
-  // The maximum is exclusive and the minimum is inclusive
-  return Math.floor(Math.random() * (max - min) + min);
-}
-
-function getSum(array) {
-  return array.reduce((partialSum, a) => partialSum + a, 0);
-}
-
-function generateNonNegtiveColumn(sum, length) {
-  const tmp = [];
-  for (let i=0; i < length - 1; i++) {
-    tmp.push(Math.random());
-  }
-  tmp.push(0);
-  tmp.push(1);
-  tmp.sort((a,b) => a - b);
-  
-  const column = [];
-  for (let i=0; i < tmp.length - 1; i++) {
-    column.push(Math.floor(sum * (tmp[i + 1] - tmp[i])));
-  }
-  
-  const currentSum = getSum(column);
-  const index = getRandomInt(0, length);
-  column[index] += sum - currentSum;
-  
-  return column;
-}
-
-function generateIntegerColumn(sum, length) {
-  const column = [];
-  for (let i=0; i < length - 1; i++) {
-    column.push(getRandomInt(-sum + 1, sum))
-  }
-  
-  const currentSum = getSum(column);
-  if (Math.abs(sum - currentSum) >= sum) {
-    return generateIntegerColumn(sum, length);
-  }  
-    
-  column.push(sum - currentSum);
-  return column;
-}
-
-function generateNumberColumn(sum, length, includeNegatives) {
-  if (includeNegatives) {
-    return generateIntegerColumn(sum, length);
-  }
-  
-  return generateNonNegtiveColumn(sum, length);
-}
-
-function generateNumberMatrix(sum, numberOfDisks, numbersPerDisk, includeNegatives) {
-  const numberMatrix = [];
-  for (let i=0; i < numbersPerDisk; i++) {
-    const numberColumn = generateNumberColumn(sum, numberOfDisks, includeNegatives);
-    numberMatrix.push(numberColumn);
-  }
-  return numberMatrix;
-}
-
-function transpose(matrix) {
-  return matrix[0].map((col, i) => matrix.map(row => row[i]));
-}
-
-function rotate(array) {
-  return array.push(array.shift());
-}
-
-function randomRotate(matrix) {
-  return matrix.map((row) => {
-    const numberOfRotations = getRandomInt(0, row.length);
-    for (let i=0; i < numberOfRotations; i++) {
-      rotate(row);
-    }
-    return row;
-  });
-}
-
-function isSolved(sum, answer) {
-  const numberMatrix = transpose(answer);
-  return numberMatrix.every((numberColumn) => getSum(numberColumn) === sum);
-}
-
-function newGame(sum, numberOfDisks, numbersPerDisk, includeNegatives) {
-  const numberMatrix = generateNumberMatrix(sum, numberOfDisks, numbersPerDisk, includeNegatives);
-  const disksText = transpose(numberMatrix);
-  randomRotate(disksText);
-  
-  if (isSolved(sum, disksText)) {
-    return newGame(sum, numberOfDisks, numbersPerDisk, includeNegatives);
-  }
-  
-  return disksText;
-}
-
-function isTouchDevice() {
-  return ('ontouchstart' in window)
-}
+export const GameContext = createContext();
 
 function App() {
   const loadingRef = useRef(0);
+  const { orientation, resizing } = useWindowOrientation();
+  
+  // Game Context State
+  const [gameMode, setGameMode] = useState(null);
+  const [targetSum, setTargetSum] = useState(null);
   const [disksText, setDisksText] = useState(null);
   const [rotatedDisksText, setRotatedDisksText] = useState(null);
-  const [sum, setSum] = useState(parseInt(localStorage.getItem('sd-sum')) || 10);
+  const [useSwipe, setUseSwipe] = useState(
+    localStorage.getItem('sd-useSwipeMode') ? localStorage.getItem('sd-useSwipeMode') === 'true' : isTouchDevice()
+  );
+  
+  // Unlimited Mode State
+  const [urlGame, setUrlGame] = useState(null);
+  const [unlimitedSum, setUnlimitedSum] = useState(parseInt(localStorage.getItem('sd-sum')) || 10);
   const [numberOfDisks, setNumberOfDisks] = useState(parseInt(localStorage.getItem('sd-numberOfDisks')) || 3);
   const [numbersPerDisk, setNumbersPerDisk] = useState(parseInt(localStorage.getItem('sd-numbersPerDisk')) || 4);
   const [includeNegatives, setIncludeNegatives] = useState(localStorage.getItem('sd-includeNegatives') === 'true');
-  const [useSwipeMode, setUseSwipeMode] = useState(
-    localStorage.getItem('sd-useSwipeMode') ? localStorage.getItem('sd-useSwipeMode') === 'true' : isTouchDevice()
-  );
   const [unlimitedStats, setUnlimitedStats] = useState([
     parseInt(localStorage.getItem('sd-unlimitedStats-3')) || 0,
     parseInt(localStorage.getItem('sd-unlimitedStats-4')) || 0,
@@ -174,9 +70,6 @@ function App() {
     parseInt(localStorage.getItem('sd-unlimitedStats-6')) || 0,
     parseInt(localStorage.getItem('sd-unlimitedStats-7')) || 0
   ]);
-  const [hasWon, setHasWon] = useState(false);
-  const [snackPack, setSnackPack] = useState([]);
-  const { orientation, resizing } = useWindowOrientation();
   
   useEffect(() => {
     let game;
@@ -184,108 +77,70 @@ function App() {
       const params = new URLSearchParams(window.location.search);
       const urlDisks = params.get('disks');
       
-      try {
-        if (!urlDisks) {
-          throw new Error('No game provided.');
-        }
-        
-        const disks = urlDisks.split('_');
-        if (disks.length < 3 || disks.length > 7) {
-          throw new Error('Invalid number of disks.');
-        }
-        
-        const numberOfColumns = disks[0].split('.').length;
-        if (numberOfColumns !== 2 &&  numberOfColumns !== 4 && numberOfColumns !== 6) {
-          throw new Error('Invalid numbers per disk.');
-        }
-        
-        let urlSum = 0;
-        game = disks.map((disk) => {
-          const columns = disk.split('.'); 
-          if (columns.length !== numberOfColumns) {
-            throw new Error('Inconsistent numbers per disk.');
+      if (urlDisks) {
+        setGameMode('unlimited');
+      } else {
+        // TO-DO: add more cases for different game modes
+        setGameMode('unlimited');
+      }
+      
+      if (urlDisks) {
+        try {
+          const disks = urlDisks.split('_');
+          if (disks.length < 3 || disks.length > 7) {
+            throw new Error('Invalid number of disks.');
           }
           
-          const numbers = columns.map((column) => {
-            const number = parseInt(column);
-            if (isNaN(number)) {
-              throw new Error('Invalid disk contents.');
+          const numberOfColumns = disks[0].split('.').length;
+          if (numberOfColumns !== 2 &&  numberOfColumns !== 4 && numberOfColumns !== 6) {
+            throw new Error('Invalid numbers per disk.');
+          }
+          
+          let urlSum = 0;
+          game = disks.map((disk) => {
+            const columns = disk.split('.'); 
+            if (columns.length !== numberOfColumns) {
+              throw new Error('Inconsistent numbers per disk.');
             }
-            return number;
+            
+            const numbers = columns.map((column) => {
+              const number = parseInt(column);
+              if (isNaN(number)) {
+                throw new Error('Invalid disk contents.');
+              }
+              return number;
+            });
+            
+            urlSum += getSum(numbers);
+            
+            return numbers;
           });
           
-          urlSum += getSum(numbers);
-          
-          return numbers;
-        });
-        
-        urlSum = urlSum / game[0].length;
-        if (urlSum !== 10 && urlSum !== 20 && urlSum !== 50 && urlSum !== 100) {
-          throw new Error('Invalid target sum.');
-        }
-        
-        setSum(urlSum);
-        setNumberOfDisks(game.length);
-        setNumbersPerDisk(game[0].length);
-        setIncludeNegatives(urlDisks.includes('-'));
-      } catch (error) {
-        if (loadingRef.current === 0) {
-          console.log(`${error.message} Generating random game...`);
-        }
-        game = null;
-      } finally {
-        loadingRef.current++;
-      }
-    }
-    
-    if (!game) {
-      game = newGame(sum, numberOfDisks, numbersPerDisk, includeNegatives);
-    }
-    setDisksText(game);
-    setRotatedDisksText(game);
-    setHasWon(false);
-  }, [sum, numberOfDisks, numbersPerDisk, includeNegatives]);
-  
-  useEffect(() => {
-    if (hasWon) {
-      const element = document.querySelector('.DisksContainer');
-      party.confetti(element, {
-        count: party.variation.range(50, 70),
-      });
-      updateUnlimitedStats();
-    }
-  }, [hasWon]);
-  
-  const onRotate = (rotatedDisksText) => {
-    setRotatedDisksText(rotatedDisksText);
-    setHasWon(isSolved(sum, rotatedDisksText));
-  }
-  
-  const handleClickNewGame = () => {
-    window.adBreak({
-      type: 'next',
-      name: 'new-game',
-      beforeAd: () => {
-        document.querySelectorAll('.adsbygoogle[data-slotcar-interstitial="true"], .adsbygoogle[data-slotcar-interstitial="true"] *').forEach(function(el) {
-          if (CSS.supports("height: 100dvh")) {
-            el.style.width = "100dvw";
-            el.style.height = "100dvh";
-          } else { 
-            el.style.width = "100vw";
-            el.style.height = "100vh";
+          urlSum = urlSum / game[0].length;
+          if (urlSum !== 10 && urlSum !== 20 && urlSum !== 50 && urlSum !== 100) {
+            throw new Error('Invalid target sum.');
           }
-        });
+          
+          setTargetSum(urlSum);
+          setUnlimitedSum(urlSum);
+          setNumberOfDisks(game.length);
+          setNumbersPerDisk(game[0].length);
+          setIncludeNegatives(urlDisks.includes('-'));
+          setUrlGame(game);
+        } catch (error) {
+          if (loadingRef.current === 0) {
+            console.log(`${error.message} Generating random game...`);
+          }
+          game = null;
+        } finally {
+          loadingRef.current++;
+        }
       }
-    });
-
-    const game = newGame(sum, numberOfDisks, numbersPerDisk, includeNegatives);
-    setDisksText(game);
-    setRotatedDisksText(game);
-    setHasWon(false);
-  }
+    }
+  }, []);
   
-  const handleChangeSum = (val) => {
-    setSum(val);
+  const handleChangeUnlimitedSum = (val) => {
+    setUnlimitedSum(val);
     localStorage.setItem('sd-sum', val);
   }
   
@@ -304,54 +159,9 @@ function App() {
     localStorage.setItem('sd-includeNegatives', val);
   }
   
-  const handleChangeUseSwipeMode = (val) => {
-    setUseSwipeMode(val);
+  const handleChangeUseSwipe = (val) => {
+    setUseSwipe(val);
     localStorage.setItem('sd-useSwipeMode', val);
-  }
-  
-  const updateUnlimitedStats = () => {
-    const newStats = unlimitedStats.slice();
-    const unlimitedWins = getSum(newStats) + 1;
-    const achievementThresholds = [1, 5, 10, 20, 50, 100];
-    
-    const val = ++newStats[numberOfDisks - 3];
-    setUnlimitedStats(newStats);
-    localStorage.setItem('sd-unlimitedStats-' + numberOfDisks, val);
-    
-    if (achievementThresholds.includes(unlimitedWins)) {
-      let message = `Win ${unlimitedWins} game${unlimitedWins == 1 ? '' : 's'}`;
-      if (unlimitedWins == 1) {
-        message += " - Nicely done!";
-      } else if (unlimitedWins == 5 && localStorage.getItem('sd-numberOfDisks') == null) {
-        message += " - Impressive! Why not add another disk?";
-      }
-      
-      setSnackPack((prev) => [...prev, { 
-        message: message, 
-        key: new Date().getTime() 
-      }]);
-    }
-  }
-  
-  const getColumnSums = () => {
-    const columnSums = [];
-    const numberMatrix = transpose(rotatedDisksText);
-    for (let i=0; i < numberMatrix.length; i++) {
-      columnSums.push({
-        calculation: numberMatrix[i].join(' + '),
-        sum: getSum(numberMatrix[i])
-      });
-    }
-    return columnSums;
-  }
-  
-  const getQueryString = () => {
-    if (!disksText) {
-      return '';
-    }
-    
-    const disks = disksText.map((disk) => disk.join('.')).join('_');
-    return `?disks=${disks}`;
   }
   
   return (
@@ -369,33 +179,43 @@ function App() {
           </Box>
         }
         <Box role="main" className="Main">
-          <MenuBar 
-            handleClickNewGame={handleClickNewGame}
-            sum={sum}
-            setSum={handleChangeSum}
-            numberOfDisks={numberOfDisks}
-            setNumberOfDisks={handleChangeNumberOfDisks}
-            numbersPerDisk={numbersPerDisk}
-            setNumbersPerDisk={handleChangeNumbersPerDisk}
-            includeNegatives={includeNegatives}
-            setIncludeNegatives={handleChangeIncludeNegatives}
-            useSwipeMode={useSwipeMode}
-            setUseSwipeMode={handleChangeUseSwipeMode}
-            getColumnSums={getColumnSums}
-            getQueryString={getQueryString}
-            unlimitedStats={unlimitedStats}
-          />
-          <Box className="Game">
-            <ReactDisks 
-              disksText={disksText}
-              theme={theme.palette.primary}
-              onRotate={debounce(onRotate, 500)}
-              disabled={hasWon}
-              swipeMode={useSwipeMode}
+          <GameContext.Provider 
+            value={{
+              gameMode,
+              targetSum,
+              setTargetSum,
+              disksText, 
+              setDisksText, 
+              rotatedDisksText, 
+              setRotatedDisksText, 
+              useSwipe, 
+              handleChangeUseSwipe
+            }}
+          >
+            <MenuBar 
+              unlimitedSum={unlimitedSum}
+              setUnlimitedSum={handleChangeUnlimitedSum}
+              numberOfDisks={numberOfDisks}
+              setNumberOfDisks={handleChangeNumberOfDisks}
+              numbersPerDisk={numbersPerDisk}
+              setNumbersPerDisk={handleChangeNumbersPerDisk}
+              includeNegatives={includeNegatives}
+              setIncludeNegatives={handleChangeIncludeNegatives}
+              unlimitedStats={unlimitedStats}
             />
-            <NewGameButton handleClick={handleClickNewGame} doTransition={!resizing} doPulsate={hasWon} />
-            <ConsecutiveSnackbars snackPack={snackPack} setSnackPack={setSnackPack} />
-          </Box>
+            {gameMode === 'unlimited' &&
+              <UnlimitedMode
+                firstGame={urlGame}
+                stats={unlimitedStats}
+                setStats={setUnlimitedStats}
+                sum={unlimitedSum}
+                numberOfDisks={numberOfDisks}
+                numbersPerDisk={numbersPerDisk}
+                includeNegatives={includeNegatives}
+                buttonTransition={!resizing}
+              />
+            }
+          </GameContext.Provider>
         </Box>
         {orientation === 'landscape' && !resizing && 
           <Box className="vertical-ad-right">

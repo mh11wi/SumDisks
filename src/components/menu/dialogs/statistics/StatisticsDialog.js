@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import {
   Box,
   Button, 
@@ -9,8 +9,9 @@ import {
   Tab,
   Tabs
 } from '@mui/material';
-import UnlimitedStatsTab from './UnlimitedStatsTab';
-import AchievementsTab from './AchievementsTab';
+import UnlimitedStatsTab from 'components/menu/dialogs/statistics/UnlimitedStatsTab';
+import AchievementsTab from 'components/menu/dialogs/statistics/AchievementsTab';
+
 
 const TabPanel = (props) => {
   const { children, value, index, ...other } = props;

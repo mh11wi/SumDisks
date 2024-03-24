@@ -1,7 +1,8 @@
-import React, { Fragment } from 'react';
+import { Fragment } from 'react';
 import { useTheme } from '@mui/material/styles';
 import { Typography } from '@mui/material';
 import { BarChart } from '@mui/x-charts/BarChart';
+
 
 const UnlimitedStatsTab = (props) => {
   const theme = useTheme();

@@ -32,4 +32,12 @@ export default defineConfig({
       },
     },
   },
+  resolve: {
+    alias: {
+      src: '/src',
+      components: '/src/components',
+      helpers: '/src/helpers',
+      hooks: '/src/hooks',
+    },
+  },
 })

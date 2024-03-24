@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import { useState, Fragment } from 'react';
 import { useTheme } from '@mui/material/styles';
 import {
   Avatar,
@@ -23,6 +23,7 @@ import {
   Lightbulb,
   Quiz
 } from '@mui/icons-material';
+
 
 const steps = [
   {
@@ -71,7 +72,7 @@ const steps = [
 
 const TipsDialog = (props) => {
   const theme = useTheme();
-  const [activeStep, setActiveStep] = React.useState(0);
+  const [activeStep, setActiveStep] = useState(0);
   const maxSteps = steps.length;
 
   const handleNext = () => {

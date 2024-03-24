@@ -1,9 +1,10 @@
-import React from 'react';
 import { Alert, Box } from '@mui/material';
 import RadioButtonUncheckedIcon from '@mui/icons-material/RadioButtonUnchecked';
+import { getSum } from 'helpers/game';
+
 
 const AchievementsTab = (props) => {
-  const unlimitedWins = props.unlimitedStats.reduce((partialSum, a) => partialSum + a, 0);
+  const unlimitedWins = getSum(props.unlimitedStats);
   
   return (
     <Box sx={{ width: "80%", p: 2 }}>

@@ -1,32 +1,47 @@
-import React, { useState } from 'react';
+import { useContext, useRef, useState } from 'react';
 import { AppBar, IconButton, Toolbar, Typography } from '@mui/material';
 import { Calculate, Help, Menu, Settings } from '@mui/icons-material';
-import MainMenu from './MainMenu';
-import HelpDialog from './HelpDialog';
-import SettingsDialog from './SettingsDialog';
-import SumDialog from './SumDialog';
-import TipsDialog from './TipsDialog';
-import ShareDialog from './ShareDialog';
-import StatisticsDialog from './StatisticsDialog';
+import MainMenu from 'components/menu/MainMenu';
+import HelpDialog from 'components/menu/dialogs/help/HelpDialog';
+import SettingsDialog from 'components/menu/dialogs/settings/SettingsDialog';
+import CalculationsDialog from 'components/menu/dialogs/calculations/CalculationsDialog';
+import TipsDialog from 'components/menu/dialogs/tips/TipsDialog';
+import ShareDialog from 'components/menu/dialogs/share/ShareDialog';
+import StatisticsDialog from 'components/menu/dialogs/statistics/StatisticsDialog';
+import { isMobile } from 'helpers/app';
+import { GameContext } from 'src/App';
 
-function isMobile() {
-  return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-}
 
 const MenuBar = (props) => {
+  const calculationsRef = useRef();
+  const { gameMode, disksText } = useContext(GameContext);
   const [menuOpen, setMenuOpen] = useState(false);
   const [helpOpen, setHelpOpen] = useState(true);
   const [tipsOpen, setTipsOpen] = useState(false);
   const [settingsOpen, setSettingsOpen] = useState(false);
   const [calculationsOpen, setCalculationsOpen] = useState(false);
-  const [columnSums, setColumnSums] = useState(null);
   const [shareOpen, setShareOpen] = useState(false);
   const [statisticsOpen, setStatisticsOpen] = useState(false);
   
+  let text, query;
+  switch (gameMode) {
+    case 'unlimited':
+      if (disksText) {
+        const disks = disksText.map((disk) => disk.join('.')).join('_');
+        text = "Can you solve this puzzle?";
+        query = `?disks=${disks}`;
+        break;
+      }
+    default:
+      text = "Like number games? Try:";
+      query = "";
+      break;
+  }
+  
   const shareData = {
     title: "Sum Disks",
-    text: props.getQueryString() ? "Can you solve this puzzle?" : "Like number games? Try:",
-    url: "https://mh11wi.github.io/SumDisks" + props.getQueryString()
+    text: text,
+    url: "https://mh11wi.github.io/SumDisks" + query
   };
   
   const handleClickMenu = () => {
@@ -62,7 +77,7 @@ const MenuBar = (props) => {
   }
   
   const handleClickCalculations = () => {
-    setColumnSums(props.getColumnSums());
+    calculationsRef.current.updateData();
     setCalculationsOpen(true);
   }
   
@@ -119,8 +134,6 @@ const MenuBar = (props) => {
         <HelpDialog
           open={helpOpen}
           onClose={handleCloseHelp}
-          sum={props.sum}
-          useSwipeMode={props.useSwipeMode}
         />
         
         <Typography variant="h5" component="h1" align="center" sx={{ fontWeight: 500, flexGrow: 1 }}>
@@ -130,11 +143,10 @@ const MenuBar = (props) => {
         <IconButton aria-label="Calculations" onClick={handleClickCalculations} color="inherit">
           <Calculate />
         </IconButton>
-        <SumDialog
+        <CalculationsDialog
+          ref={calculationsRef}
           open={calculationsOpen}
           onClose={handleCloseCalculations}
-          data={columnSums}
-          sum={props.sum}
         />
         
         <IconButton aria-label="Settings" onClick={handleClickSettings} color="inherit">
@@ -143,16 +155,14 @@ const MenuBar = (props) => {
         <SettingsDialog
           open={settingsOpen}
           onClose={handleCloseSettings}
-          sum={props.sum}
-          setSum={props.setSum}
+          sum={props.unlimitedSum}
+          setSum={props.setUnlimitedSum}
           numberOfDisks={props.numberOfDisks}
           setNumberOfDisks={props.setNumberOfDisks}
           numbersPerDisk={props.numbersPerDisk}
           setNumbersPerDisk={props.setNumbersPerDisk}
           includeNegatives={props.includeNegatives}
           setIncludeNegatives={props.setIncludeNegatives}
-          useSwipeMode={props.useSwipeMode}
-          setUseSwipeMode={props.setUseSwipeMode}
         />
         
         {/* Dialogs where icon only in MainMenu: */}

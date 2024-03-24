@@ -1,4 +1,4 @@
-import React from 'react';
+import { useContext } from 'react';
 import {
   Button, 
   Dialog, 
@@ -16,10 +16,14 @@ import {
   FastForward, 
   Settings
 } from '@mui/icons-material';
+import { GameContext } from 'src/App';
+
 
 const HelpDialog = (props) => {
+  const { gameMode, targetSum, useSwipe } = useContext(GameContext);
+  
   let instructions;
-  if (props.useSwipeMode) {
+  if (useSwipe) {
     instructions = "You can rotate a disk by tapping on it, and then swiping left or right anywhere on the screen.";
   } else {
     instructions = "You can rotate a disk by clicking on it, and then clicking either the clockwise or counterclockwise arrows that appear.";
@@ -40,7 +44,7 @@ const HelpDialog = (props) => {
           <List>
             <ListItem>
               <ListItemText>
-                Rotate the disks so that every column of numbers adds up to { props.sum }.
+                Rotate the disks so that every column of numbers adds up to { targetSum }.
               </ListItemText>
             </ListItem>
             
@@ -48,25 +52,27 @@ const HelpDialog = (props) => {
               <ListItemText>{ instructions }</ListItemText>
             </ListItem>
 
-            <ListItem alignItems="flex-start" sx={{ flexDirection: 'column' }}>
-              <ListItemText>
-                Play as much as you like! Each game is randomly generated, so the fun is endless. When you are ready to try another, use the following buttons:
-              </ListItemText>
-              <List>
-                <ListItem sx={{ py: 0 }}>
-                  <ListItemIcon>
-                    <Settings />
-                  </ListItemIcon>
-                  <ListItemText primary="Change the game settings/difficulty" />
-                </ListItem>
-                <ListItem sx={{ py: 0 }}>
-                  <ListItemIcon>
-                    <FastForward />
-                  </ListItemIcon>
-                  <ListItemText primary="Start a new game with the same settings" />
-                </ListItem>
-              </List>
-            </ListItem>
+            {gameMode === 'unlimited' &&
+              <ListItem alignItems="flex-start" sx={{ flexDirection: 'column' }}>
+                <ListItemText>
+                  Play as much as you like! Each game is randomly generated, so the fun is endless. When you are ready to try another, use the following buttons:
+                </ListItemText>
+                <List>
+                  <ListItem sx={{ py: 0 }}>
+                    <ListItemIcon>
+                      <Settings />
+                    </ListItemIcon>
+                    <ListItemText primary="Change the game settings/difficulty" />
+                  </ListItem>
+                  <ListItem sx={{ py: 0 }}>
+                    <ListItemIcon>
+                      <FastForward />
+                    </ListItemIcon>
+                    <ListItemText primary="Start a new game with the same settings" />
+                  </ListItem>
+                </List>
+              </ListItem>
+            }
           </List>
         </DialogContentText>
       </DialogContent>
