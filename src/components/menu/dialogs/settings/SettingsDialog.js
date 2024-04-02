@@ -11,29 +11,9 @@ import {
   Typography
 } from '@mui/material';
 import { isTouchDevice } from 'helpers/app';
+import { diskMarks, columnMarks, sumMarks } from 'helpers/config';
 import { GameContext } from 'src/App';
 
-
-const sumMarks = [
-  { value: 10, label: '10' },
-  { value: 20, label: '20' },
-  { value: 50, label: '50' },
-  { value: 100, label: '100' },
-];
-
-const numbersMarks = [
-  { value: 2, label: '2' },
-  { value: 4, label: '4' },
-  { value: 6, label: '6' },
-];
-
-const disksMarks = [
-  { value: 3, label: '3' },
-  { value: 4, label: '4' },
-  { value: 5, label: '5' },
-  { value: 6, label: '6' },
-  { value: 7, label: '7' },
-];
 
 const SettingsDialog = (props) => {
   const { gameMode, useSwipe, handleChangeUseSwipe } = useContext(GameContext);
@@ -42,12 +22,12 @@ const SettingsDialog = (props) => {
     props.setSum(newValue);
   }
   
-  const onNumbersChange = (event, newValue) => {
-    props.setNumbersPerDisk(newValue);
-  }
-  
   const onDisksChange = (event, newValue) => {
     props.setNumberOfDisks(newValue);
+  }
+  
+  const onColumnsChange = (event, newValue) => {
+    props.setNumberOfColumns(newValue);
   }
   
   const onNegativesChange = (event, newValue) => {
@@ -79,26 +59,9 @@ const SettingsDialog = (props) => {
               value={props.sum}
               onChangeCommitted={onSumChange}
               step={null}
-              min={10}
-              max={100}
+              min={sumMarks[0].value}
+              max={sumMarks[sumMarks.length - 1].value}
               marks={sumMarks}
-            />
-          </DialogContentText>
-        }
-        
-        {gameMode === 'unlimited' &&
-          <DialogContentText component="div" sx={{ mb: 1 }}>
-            <Typography id="numbers-slider">
-              Numbers per disk
-            </Typography>
-            <Slider 
-              aria-labelledby="numbers-slider"
-              value={props.numbersPerDisk}
-              onChangeCommitted={onNumbersChange}
-              step={null}
-              min={2}
-              max={6}
-              marks={numbersMarks}
             />
           </DialogContentText>
         }
@@ -113,9 +76,26 @@ const SettingsDialog = (props) => {
               value={props.numberOfDisks}
               onChangeCommitted={onDisksChange}
               step={null}
-              min={3}
-              max={7}
-              marks={disksMarks}
+              min={diskMarks[0].value}
+              max={diskMarks[diskMarks.length - 1].value}
+              marks={diskMarks}
+            />
+          </DialogContentText>
+        }
+        
+        {gameMode === 'unlimited' &&
+          <DialogContentText component="div" sx={{ mb: 1 }}>
+            <Typography id="columns-slider">
+              Number of columns
+            </Typography>
+            <Slider 
+              aria-labelledby="columns-slider"
+              value={props.numberOfColumns}
+              onChangeCommitted={onColumnsChange}
+              step={null}
+              min={columnMarks[0].value}
+              max={columnMarks[columnMarks.length - 1].value}
+              marks={columnMarks}
             />
           </DialogContentText>
         }
@@ -134,7 +114,7 @@ const SettingsDialog = (props) => {
         }
         
         {isTouchDevice() && 
-          <DialogContentText component="div" sx={{ pt: 2 }}>
+          <DialogContentText component="div" sx={{ pt: gameMode === 'unlimited' ? 2 : 0 }}>
             <Typography id="swipe-mode-switch">
               Swipe to rotate
             </Typography>
@@ -143,6 +123,12 @@ const SettingsDialog = (props) => {
               checked={useSwipe}
               onChange={onSwipeChange}
             />
+          </DialogContentText>
+        }
+        
+        {gameMode !== 'unlimited' && !isTouchDevice() &&
+          <DialogContentText component="div">
+            Stay tuned for future settings of this game mode.
           </DialogContentText>
         }
       </DialogContent>

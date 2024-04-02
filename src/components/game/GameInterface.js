@@ -34,8 +34,8 @@ const GameInterface = forwardRef((props, ref) => {
         }]);
       },
       
-      loadNewGame(sum, numberOfDisks, numbersPerDisk, includeNegatives) {
-        const game = newGame(sum, numberOfDisks, numbersPerDisk, includeNegatives);
+      loadNewGame(sum, numberOfDisks, numberOfColumns, includeNegatives) {
+        const game = newGame(sum, numberOfDisks, numberOfColumns, includeNegatives);
         setTargetSum(sum);
         setDisksText(game);
         setRotatedDisksText(game);
@@ -50,7 +50,25 @@ const GameInterface = forwardRef((props, ref) => {
   }
   
   return (
-    <Box className="Game">
+    <Box className="Game" sx={{ position: 'relative' }}>
+      <Box 
+        className="gameLabel left" 
+        sx={{ 
+          color: props.completed ? 'success.dark' : '',
+          fontWeight: props.completed ? '500' : ''
+        }}
+      >
+        { props.left }
+      </Box>
+      <Box 
+        className="gameLabel right" 
+        sx={{ 
+          color: props.completed ? 'success.dark' : '',
+          fontWeight: props.completed ? '500' : '' 
+        }}
+      >
+        { props.right }
+      </Box>
       <ReactDisks 
         disksText={disksText}
         theme={theme.palette.primary}

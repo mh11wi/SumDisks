@@ -1,13 +1,15 @@
-import { createContext, useEffect, useRef, useState } from 'react';
+import { createContext, useEffect, useState } from 'react';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { green, grey, pink } from '@mui/material/colors';
 import Box from '@mui/material/Box';
 import AdSense from 'react-adsense';
 import MenuBar from 'components/menu/MenuBar';
 import UnlimitedMode from 'components/game/modes/unlimited/UnlimitedMode';
+import ChallengeMode from 'components/game/modes/challenge/ChallengeMode';
 import useWindowOrientation from 'hooks/useWindowOrientation';
 import { isTouchDevice } from 'helpers/app';
 import { getSum } from 'helpers/game';
+import { diskMarks, columnMarks, sumMarks } from 'helpers/config';
 import '@fontsource/roboto/300.css';
 import '@fontsource/roboto/400.css';
 import '@fontsource/roboto/500.css';
@@ -45,7 +47,6 @@ const adStyle = {
 export const GameContext = createContext();
 
 function App() {
-  const loadingRef = useRef(0);
   const { orientation, resizing } = useWindowOrientation();
   
   // Game Context State
@@ -56,13 +57,14 @@ function App() {
   const [useSwipe, setUseSwipe] = useState(
     localStorage.getItem('sd-useSwipeMode') ? localStorage.getItem('sd-useSwipeMode') === 'true' : isTouchDevice()
   );
+  const [timerStatus, setTimerStatus] = useState(null);
   
   // Unlimited Mode State
   const [urlGame, setUrlGame] = useState(null);
   const [unlimitedSum, setUnlimitedSum] = useState(parseInt(localStorage.getItem('sd-sum')) || 10);
-  const [numberOfDisks, setNumberOfDisks] = useState(parseInt(localStorage.getItem('sd-numberOfDisks')) || 3);
-  const [numbersPerDisk, setNumbersPerDisk] = useState(parseInt(localStorage.getItem('sd-numbersPerDisk')) || 4);
-  const [includeNegatives, setIncludeNegatives] = useState(localStorage.getItem('sd-includeNegatives') === 'true');
+  const [unlimitedDisks, setUnlimitedDisks] = useState(parseInt(localStorage.getItem('sd-numberOfDisks')) || 3);
+  const [unlimitedColumns, setUnlimitedColumns] = useState(parseInt(localStorage.getItem('sd-numbersPerDisk')) || 4);
+  const [unlimitedIncludeNegatives, setUnlimitedIncludeNegatives] = useState(localStorage.getItem('sd-includeNegatives') === 'true');
   const [unlimitedStats, setUnlimitedStats] = useState([
     parseInt(localStorage.getItem('sd-unlimitedStats-3')) || 0,
     parseInt(localStorage.getItem('sd-unlimitedStats-4')) || 0,
@@ -71,71 +73,111 @@ function App() {
     parseInt(localStorage.getItem('sd-unlimitedStats-7')) || 0
   ]);
   
+  // Challenge Mode State
+  const [challengeSum, setChallengeSum] = useState(10);
+  const [challengeDisks, setChallengeDisks] = useState(3);
+  const [challengeColumns, setChallengeColumns] = useState(4);
+  const [challengeIncludeNegatives, setChallengeIncludeNegatives] = useState(false);
+  const [challengeTargetWins, setChallengeTargetWins] = useState(10);
+  const [challengeStats, setChallengeStats] = useState(parseInt(localStorage.getItem('sd-challengeStats')) || 0);
+  
   useEffect(() => {
-    let game;
-    if (loadingRef.current < 2) {
-      const params = new URLSearchParams(window.location.search);
-      const urlDisks = params.get('disks');
-      
-      if (urlDisks) {
-        setGameMode('unlimited');
-      } else {
-        // TO-DO: add more cases for different game modes
-        setGameMode('unlimited');
-      }
-      
-      if (urlDisks) {
-        try {
-          const disks = urlDisks.split('_');
-          if (disks.length < 3 || disks.length > 7) {
-            throw new Error('Invalid number of disks.');
+    const params = new URLSearchParams(window.location.search);
+    
+    try {
+      if (params.get('disks')) {
+        // Load a specific puzzle if valid
+        const disks = urlDisks.split('_');
+        if (!diskMarks.map((mark) => mark.value).includes(disks.length)) {
+          throw new Error('Invalid number of disks.');
+        }
+        
+        const numberOfColumns = disks[0].split('.').length;
+        if (!columnMarks.map((mark) => mark.value).includes(numberOfColumns)) {
+          throw new Error('Invalid number of columns.');
+        }
+        
+        let urlSum = 0;
+        const game = disks.map((disk) => {
+          const columns = disk.split('.'); 
+          if (columns.length !== numberOfColumns) {
+            throw new Error('Inconsistent number of columns.');
           }
           
-          const numberOfColumns = disks[0].split('.').length;
-          if (numberOfColumns !== 2 &&  numberOfColumns !== 4 && numberOfColumns !== 6) {
-            throw new Error('Invalid numbers per disk.');
-          }
-          
-          let urlSum = 0;
-          game = disks.map((disk) => {
-            const columns = disk.split('.'); 
-            if (columns.length !== numberOfColumns) {
-              throw new Error('Inconsistent numbers per disk.');
+          const numbers = columns.map((column) => {
+            const number = parseInt(column);
+            if (isNaN(number)) {
+              throw new Error('Invalid disk contents.');
             }
-            
-            const numbers = columns.map((column) => {
-              const number = parseInt(column);
-              if (isNaN(number)) {
-                throw new Error('Invalid disk contents.');
-              }
-              return number;
-            });
-            
-            urlSum += getSum(numbers);
-            
-            return numbers;
+            return number;
           });
           
-          urlSum = urlSum / game[0].length;
-          if (urlSum !== 10 && urlSum !== 20 && urlSum !== 50 && urlSum !== 100) {
-            throw new Error('Invalid target sum.');
+          urlSum += getSum(numbers);
+          
+          return numbers;
+        });
+        
+        urlSum = urlSum / game[0].length;
+        if (!sumMarks.map((mark) => mark.value).includes(urlSum)) {
+          throw new Error('Invalid target sum.');
+        }
+        
+        setGameMode('unlimited');
+        setTargetSum(urlSum);
+        setUnlimitedSum(urlSum);
+        setUnlimitedDisks(game.length);
+        setUnlimitedColumns(game[0].length);
+        setUnlimitedIncludeNegatives(urlDisks.includes('-'));
+        setUrlGame(game);
+        
+      }  else if (params.get('challenge')) {
+          // Load a specific challenge if valid
+          const challenge = params.get('challenge').split('_');
+          if (challenge.length !== 5) {
+            throw new Error('Invalid number of challenge parameters.');
           }
           
-          setTargetSum(urlSum);
-          setUnlimitedSum(urlSum);
-          setNumberOfDisks(game.length);
-          setNumbersPerDisk(game[0].length);
-          setIncludeNegatives(urlDisks.includes('-'));
-          setUrlGame(game);
-        } catch (error) {
-          if (loadingRef.current === 0) {
-            console.log(`${error.message} Generating random game...`);
+          const urlSum = parseInt(challenge[0]);
+          if (isNaN(urlSum) || !sumMarks.map((mark) => mark.value).includes(urlSum)) {
+            throw new Error('Invalid target sum for challenge.');
           }
-          game = null;
-        } finally {
-          loadingRef.current++;
+          
+          const numberOfDisks = parseInt(challenge[1]);
+          if (isNaN(numberOfDisks) || !diskMarks.map((mark) => mark.value).includes(numberOfDisks)) {
+            throw new Error('Invalid number of disks for challenge.');
+          }
+          
+          const numberOfColumns = parseInt(challenge[2]);
+          if (isNaN(numberOfColumns) || !columnMarks.map((mark) => mark.value).includes(numberOfColumns)) {
+            throw new Error('Invalid number of columns for challenge.');
+          }
+          
+          const urlIncludeNegatives = parseInt(challenge[3]);
+          if (urlIncludeNegatives !== 0 && urlIncludeNegatives !== 1) {
+            throw new Error('Invalid negative inclusion for challenge.');
+          }
+          
+          const numberOfWins = parseInt(challenge[4]);
+          if (isNaN(numberOfWins) || numberOfWins <= 1) {
+            throw new Error('Invalid number of games for challenge.');
+          }
+          
+          setGameMode('challenge');
+          setTargetSum(urlSum);
+          setChallengeSum(urlSum);
+          setChallengeDisks(numberOfDisks);
+          setChallengeColumns(numberOfColumns);
+          setChallengeIncludeNegatives(urlIncludeNegatives === 1);
+          setChallengeTargetWins(numberOfWins);
+          window.adConfig({preloadAdBreaks: 'on'});
+        
+        } else {
+          // Load unlimited mode otherwise
+          setGameMode('unlimited');
         }
-      }
+    } catch (error) {
+      console.log(`${error.message} Generating random game in Unlimited Mode...`);
+      setGameMode('unlimited');
     }
   }, []);
   
@@ -144,18 +186,18 @@ function App() {
     localStorage.setItem('sd-sum', val);
   }
   
-  const handleChangeNumberOfDisks = (val) => {
-    setNumberOfDisks(val);
+  const handleChangeUnlimitedDisks = (val) => {
+    setUnlimitedDisks(val);
     localStorage.setItem('sd-numberOfDisks', val);
   }
   
-  const handleChangeNumbersPerDisk = (val) => {
-    setNumbersPerDisk(val);
+  const handleChangeUnlimitedColumns = (val) => {
+    setUnlimitedColumns(val);
     localStorage.setItem('sd-numbersPerDisk', val);
   }
   
-  const handleChangeIncludeNegatives = (val) => {
-    setIncludeNegatives(val);
+  const handleChangeUnlimitedIncludeNegatives = (val) => {
+    setUnlimitedIncludeNegatives(val);
     localStorage.setItem('sd-includeNegatives', val);
   }
   
@@ -189,29 +231,58 @@ function App() {
               rotatedDisksText, 
               setRotatedDisksText, 
               useSwipe, 
-              handleChangeUseSwipe
+              handleChangeUseSwipe,
+              timerStatus,
+              setTimerStatus
             }}
           >
-            <MenuBar 
-              unlimitedSum={unlimitedSum}
-              setUnlimitedSum={handleChangeUnlimitedSum}
-              numberOfDisks={numberOfDisks}
-              setNumberOfDisks={handleChangeNumberOfDisks}
-              numbersPerDisk={numbersPerDisk}
-              setNumbersPerDisk={handleChangeNumbersPerDisk}
-              includeNegatives={includeNegatives}
-              setIncludeNegatives={handleChangeIncludeNegatives}
-              unlimitedStats={unlimitedStats}
-            />
+            {gameMode && 
+              <MenuBar 
+                unlimitedSum={unlimitedSum}
+                setUnlimitedSum={handleChangeUnlimitedSum}
+                unlimitedDisks={unlimitedDisks}
+                setUnlimitedDisks={handleChangeUnlimitedDisks}
+                unlimitedColumns={unlimitedColumns}
+                setUnlimitedColumns={handleChangeUnlimitedColumns}
+                unlimitedIncludeNegatives={unlimitedIncludeNegatives}
+                setUnlimitedIncludeNegatives={handleChangeUnlimitedIncludeNegatives}
+                unlimitedStats={unlimitedStats}
+                challengeSum={challengeSum}
+                setChallengeSum={setChallengeSum}
+                challengeDisks={challengeDisks}
+                setChallengeDisks={setChallengeDisks}
+                challengeColumns={challengeColumns}
+                setChallengeColumns={setChallengeColumns}
+                challengeIncludeNegatives={challengeIncludeNegatives}
+                setChallengeIncludeNegatives={setChallengeIncludeNegatives}
+                challengeTargetWins={challengeTargetWins}
+                setChallengeTargetWins={setChallengeTargetWins}
+                challengeStats={challengeStats}
+              />
+            }
+              
             {gameMode === 'unlimited' &&
               <UnlimitedMode
                 firstGame={urlGame}
                 stats={unlimitedStats}
                 setStats={setUnlimitedStats}
                 sum={unlimitedSum}
-                numberOfDisks={numberOfDisks}
-                numbersPerDisk={numbersPerDisk}
-                includeNegatives={includeNegatives}
+                numberOfDisks={unlimitedDisks}
+                numberOfColumns={unlimitedColumns}
+                includeNegatives={unlimitedIncludeNegatives}
+                buttonTransition={!resizing}
+              />
+            }
+            
+            {gameMode === 'challenge' && 
+              <ChallengeMode 
+                stats={challengeStats}
+                setStats={setChallengeStats}
+                sum={challengeSum}
+                numberOfDisks={challengeDisks}
+                numberOfColumns={challengeColumns}
+                includeNegatives={challengeIncludeNegatives}
+                targetWins={challengeTargetWins}
                 buttonTransition={!resizing}
               />
             }

@@ -1,16 +1,23 @@
+import { useContext } from 'react';
 import { 
   Box, 
   Drawer, 
+  FormControl,
+  InputLabel,
   Link, 
   List, 
   ListItem, 
   ListItemButton, 
   ListItemIcon, 
-  ListItemText 
+  ListItemText, 
+  MenuItem,
+  Select
 } from '@mui/material';
 import { 
+  AllInclusive,
   Calculate, 
-  Facebook, 
+  Facebook,
+  Grade,  
   Help, 
   Home, 
   Leaderboard, 
@@ -20,9 +27,12 @@ import {
   Twitter, 
   YouTube 
 } from '@mui/icons-material';
+import { GameContext } from 'src/App';
 
 
 const MainMenu = (props) => {
+  const { gameMode } = useContext(GameContext);
+  
   const handleClickHelp = () => {
     props.onClose();
     props.handleClickHelp();
@@ -53,6 +63,11 @@ const MainMenu = (props) => {
     props.handleClickStatistics();
   }
   
+  const handleChangeMode = (event) => {
+    props.onClose();
+    props.handleChangeMode(event);
+  }
+  
   return (
     <Drawer
       PaperProps={{ 
@@ -68,7 +83,37 @@ const MainMenu = (props) => {
       onClose={props.onClose} 
     >
       <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between', height: '100%' }}>
-        <List>
+        <List sx={{ mb: 2 }}>
+          <ListItem>
+            <FormControl sx={{ width: '100%', my: 2 }}>
+              <InputLabel id="game-mode-label">Game Mode</InputLabel>
+              <Select
+                labelId="game-mode-label"
+                id="game-mode"
+                label="Game Mode"
+                defaultValue={gameMode}
+                onChange={handleChangeMode}
+                sx={{ 
+                  '.MuiListItemIcon-root': { minWidth: 'auto', pr: 2 },
+                  '.MuiSelect-select': { display: "flex !important", alignItems: 'center' },
+                }}
+              >
+                <MenuItem value="unlimited">
+                  <ListItemIcon>
+                    <AllInclusive />
+                  </ListItemIcon>
+                  <ListItemText>Unlimited Mode</ListItemText>
+                </MenuItem>
+                <MenuItem value="challenge">
+                  <ListItemIcon>
+                    <Grade />
+                  </ListItemIcon>
+                  <ListItemText>Challenge Mode</ListItemText>
+                </MenuItem>
+              </Select>
+            </FormControl>
+          </ListItem>
+        
           <ListItemButton onClick={handleClickHelp}>
             <ListItemIcon>
               <Help />

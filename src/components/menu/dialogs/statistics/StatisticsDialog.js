@@ -53,7 +53,7 @@ const StatisticsDialog = (props) => {
       <DialogContent id="statistics-dialog-content" dividers={true} sx={{ px: 2, py: 0 }}>
         <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
           <Tabs value={value} onChange={handleChange} aria-label="dialog tabs">
-            <Tab label="Statistics" sx={{ fontSize: '0.75em' }} />
+            <Tab label="Unlimited" sx={{ fontSize: '0.75em' }} />
             <Tab label="Achievements" sx={{ fontSize: '0.75em' }} />
           </Tabs>
         </Box>
@@ -63,7 +63,7 @@ const StatisticsDialog = (props) => {
         </TabPanel>
         
         <TabPanel value={value} index={1}>
-          <AchievementsTab unlimitedStats={props.unlimitedStats} />
+          <AchievementsTab unlimitedStats={props.unlimitedStats} challengeStats={props.challengeStats} />
         </TabPanel>
       </DialogContent>
       <DialogActions>

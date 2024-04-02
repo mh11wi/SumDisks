@@ -1,8 +1,9 @@
 import { useContext, useEffect, useRef, useState } from 'react';
 import NewGameButton from 'components/game/modes/unlimited/NewGameButton';
 import GameInterface from 'components/game/GameInterface';
-import { GameContext } from 'src/App';
 import { getSum } from 'helpers/game';
+import { unlimitedThresholds } from 'helpers/config';
+import { GameContext } from 'src/App';
 
 
 const UnlimitedMode = (props) => {
@@ -16,9 +17,9 @@ const UnlimitedMode = (props) => {
       setRotatedDisksText(props.firstGame);
     } else {
       setPulsateButton(false);
-      gameRef.current.loadNewGame(props.sum, props.numberOfDisks, props.numbersPerDisk, props.includeNegatives);
+      gameRef.current.loadNewGame(props.sum, props.numberOfDisks, props.numberOfColumns, props.includeNegatives);
     }
-  }, [props.firstGame, props.sum, props.numberOfDisks, props.numbersPerDisk, props.includeNegatives]);
+  }, [props.firstGame, props.sum, props.numberOfDisks, props.numberOfColumns, props.includeNegatives]);
   
   const handleClickNewGame = () => {
     window.adBreak({
@@ -38,19 +39,18 @@ const UnlimitedMode = (props) => {
     });
     
     setPulsateButton(false);
-    gameRef.current.loadNewGame(props.sum, props.numberOfDisks, props.numbersPerDisk, props.includeNegatives);
+    gameRef.current.loadNewGame(props.sum, props.numberOfDisks, props.numberOfColumns, props.includeNegatives);
   }
   
   const updateStats = () => {
     const newStats = props.stats.slice();
     const unlimitedWins = getSum(newStats) + 1;
-    const achievementThresholds = [1, 5, 10, 20, 50, 100];
     
     const val = ++newStats[props.numberOfDisks - 3];
     props.setStats(newStats);
     localStorage.setItem('sd-unlimitedStats-' + props.numberOfDisks, val);
     
-    if (achievementThresholds.includes(unlimitedWins)) {
+    if (unlimitedThresholds.includes(unlimitedWins)) {
       let message = `Win ${unlimitedWins} game${unlimitedWins == 1 ? '' : 's'}`;
       if (unlimitedWins == 1) {
         message += " - Nicely done!";

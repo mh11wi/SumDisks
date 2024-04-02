@@ -20,7 +20,8 @@
     "react-adsense": "^0.1.0",
     "react-disks": "^1.6.1",
     "react-dom": "^18.2.0",
-    "react-share": "^4.4.1"
+    "react-share": "^4.4.1",
+    "react-timer-hook": "^3.0.7"
   },
   "devDependencies": {
     "@types/react": "^18.2.37",

@@ -1,6 +1,23 @@
 import { useContext, useRef, useState } from 'react';
-import { AppBar, IconButton, Toolbar, Typography } from '@mui/material';
-import { Calculate, Help, Menu, Settings } from '@mui/icons-material';
+import { 
+  AppBar, 
+  FormControl, 
+  IconButton, 
+  ListItemIcon,
+  ListItemText,
+  MenuItem, 
+  Select, 
+  Toolbar, 
+  Typography 
+} from '@mui/material';
+import { 
+  AllInclusive,
+  Calculate, 
+  Grade,
+  Help, 
+  Menu, 
+  Settings 
+} from '@mui/icons-material';
 import MainMenu from 'components/menu/MainMenu';
 import HelpDialog from 'components/menu/dialogs/help/HelpDialog';
 import SettingsDialog from 'components/menu/dialogs/settings/SettingsDialog';
@@ -8,13 +25,14 @@ import CalculationsDialog from 'components/menu/dialogs/calculations/Calculation
 import TipsDialog from 'components/menu/dialogs/tips/TipsDialog';
 import ShareDialog from 'components/menu/dialogs/share/ShareDialog';
 import StatisticsDialog from 'components/menu/dialogs/statistics/StatisticsDialog';
+import ChallengeDialog from 'components/menu/dialogs/challenge/ChallengeDialog';
 import { isMobile } from 'helpers/app';
 import { GameContext } from 'src/App';
 
 
 const MenuBar = (props) => {
   const calculationsRef = useRef();
-  const { gameMode, disksText } = useContext(GameContext);
+  const { gameMode, disksText, timerStatus, setTimerStatus } = useContext(GameContext);
   const [menuOpen, setMenuOpen] = useState(false);
   const [helpOpen, setHelpOpen] = useState(true);
   const [tipsOpen, setTipsOpen] = useState(false);
@@ -22,9 +40,16 @@ const MenuBar = (props) => {
   const [calculationsOpen, setCalculationsOpen] = useState(false);
   const [shareOpen, setShareOpen] = useState(false);
   const [statisticsOpen, setStatisticsOpen] = useState(false);
+  const [challengeOpen, setChallengeOpen] = useState(false);
   
+  const challengeQuery = `?challenge=${props.challengeSum}_${props.challengeDisks}_${props.challengeColumns}_${props.challengeIncludeNegatives ? 1 : 0}_${props.challengeTargetWins}`;
   let text, query;
+  
   switch (gameMode) {
+    case 'challenge':
+      text = `How quickly can you finish ${props.challengeTargetWins} games?`;
+      query = challengeQuery;
+      break;
     case 'unlimited':
       if (disksText) {
         const disks = disksText.map((disk) => disk.join('.')).join('_');
@@ -58,6 +83,11 @@ const MenuBar = (props) => {
   
   const handleCloseHelp = () => {
     setHelpOpen(false);
+    if (gameMode !== 'unlimited' && timerStatus === null) {
+      setTimeout(function() {
+        setTimerStatus('started');
+      }, 500);
+    }
   }
   
   const handleClickTips = () => {
@@ -111,6 +141,33 @@ const MenuBar = (props) => {
     setStatisticsOpen(false);
   }
   
+  const renderMode = (value) => {
+    switch (value) {
+      case 'challenge':
+        return ( <Grade /> );
+      case 'unlimited':
+      default:
+        return ( <AllInclusive /> );
+    }
+  }
+  
+  const handleChangeMode = (event) => {
+    let query = '';
+    switch (event.target.value) {
+      case "challenge":
+        setChallengeOpen(true);
+        break;
+      default:
+        window.location = window.location.origin + query;
+        break;
+    }
+  }
+  
+  const handleCloseChallenge = () => {
+    setChallengeOpen(false);
+    window.location = window.location.origin + challengeQuery;
+  }
+  
   return (
     <AppBar position="relative">
       <Toolbar variant="dense">
@@ -126,7 +183,66 @@ const MenuBar = (props) => {
           handleClickShare={handleClickShare}
           handleClickSettings={handleClickSettings}
           handleClickStatistics={handleClickStatistics}
+          handleChangeMode={handleChangeMode}
         />
+        
+        <FormControl sx={{ width: 'calc(80px - 0.5rem)', mr: '0.5rem' }} size="small">
+          <Select 
+            defaultValue={gameMode}
+            renderValue={renderMode} 
+            onChange={handleChangeMode}
+            sx={{
+              color: "white",
+              '.MuiSelect-select': {
+                display: "flex !important",
+              },
+              '.MuiOutlinedInput-notchedOutline': {
+                border: 0,
+              },
+              '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
+                backgroundColor: "rgb(255, 255, 255, 0.2) !important",
+                borderRadius: "7.5px",
+              },
+              '&:hover .MuiOutlinedInput-notchedOutline': {
+                backgroundColor: "rgb(0, 0, 0, 0.05)",
+              },
+              '.MuiSvgIcon-root ': {
+                fill: "white",
+              }
+            }}
+          >
+            <MenuItem value="unlimited">
+              <ListItemIcon>
+                <AllInclusive />
+              </ListItemIcon>
+              <ListItemText>Unlimited Mode</ListItemText>
+            </MenuItem>
+            <MenuItem value="challenge">
+              <ListItemIcon>
+                <Grade />
+              </ListItemIcon>
+              <ListItemText>Challenge Mode</ListItemText>
+            </MenuItem>
+          </Select>
+        </FormControl>
+        <ChallengeDialog
+          open={challengeOpen}
+          onClose={handleCloseChallenge}
+          sum={props.challengeSum}
+          setSum={props.setChallengeSum}
+          numberOfDisks={props.challengeDisks}
+          setNumberOfDisks={props.setChallengeDisks}
+          numberOfColumns={props.challengeColumns}
+          setNumberOfColumns={props.setChallengeColumns}
+          includeNegatives={props.challengeIncludeNegatives}
+          setIncludeNegatives={props.setChallengeIncludeNegatives}
+          targetWins={props.challengeTargetWins}
+          setTargetWins={props.setChallengeTargetWins}
+        />
+        
+        <Typography variant="h5" component="h1" align="center" sx={{ fontWeight: 500, flexGrow: 1 }}>
+          Sum Disks
+        </Typography>
         
         <IconButton aria-label="Help" onClick={handleClickHelp} color="inherit">
           <Help />
@@ -134,11 +250,8 @@ const MenuBar = (props) => {
         <HelpDialog
           open={helpOpen}
           onClose={handleCloseHelp}
+          challengeTargetWins={props.challengeTargetWins}
         />
-        
-        <Typography variant="h5" component="h1" align="center" sx={{ fontWeight: 500, flexGrow: 1 }}>
-          Sum Disks
-        </Typography>
         
         <IconButton aria-label="Calculations" onClick={handleClickCalculations} color="inherit">
           <Calculate />
@@ -157,12 +270,12 @@ const MenuBar = (props) => {
           onClose={handleCloseSettings}
           sum={props.unlimitedSum}
           setSum={props.setUnlimitedSum}
-          numberOfDisks={props.numberOfDisks}
-          setNumberOfDisks={props.setNumberOfDisks}
-          numbersPerDisk={props.numbersPerDisk}
-          setNumbersPerDisk={props.setNumbersPerDisk}
-          includeNegatives={props.includeNegatives}
-          setIncludeNegatives={props.setIncludeNegatives}
+          numberOfDisks={props.unlimitedDisks}
+          setNumberOfDisks={props.setUnlimitedDisks}
+          numberOfColumns={props.unlimitedColumns}
+          setNumberOfColumns={props.setUnlimitedColumns}
+          includeNegatives={props.unlimitedIncludeNegatives}
+          setIncludeNegatives={props.setUnlimitedIncludeNegatives}
         />
         
         {/* Dialogs where icon only in MainMenu: */}
@@ -181,6 +294,7 @@ const MenuBar = (props) => {
           open={statisticsOpen}
           onClose={handleCloseStatistics}
           unlimitedStats={props.unlimitedStats}
+          challengeStats={props.challengeStats}
         />
       </Toolbar>
     </AppBar>
