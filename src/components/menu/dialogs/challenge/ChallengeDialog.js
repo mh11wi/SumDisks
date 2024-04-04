@@ -121,7 +121,7 @@ const ChallengeDialog = (props) => {
         </DialogContentText>
       </DialogContent>
       <DialogActions>
-        <Button onClick={props.onClose}>Create</Button>
+        <Button onClick={props.onCreate}>Create</Button>
       </DialogActions>
     </Dialog>
   );

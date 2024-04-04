@@ -35,7 +35,7 @@ const HelpDialog = (props) => {
     if (timerStatus === null) {
       return (
         <ListItemText>
-          How quickly can you finish {props.challengeTargetWins} randomly generated games? Press START to begin the challenge.
+          How quickly can you finish {props.challengeTargetWins} randomly generated games? The timer will begin once this dialog closes.
         </ListItemText>
       );
     } else if (timerStatus === 'started') {

@@ -41,6 +41,7 @@ const MenuBar = (props) => {
   const [shareOpen, setShareOpen] = useState(false);
   const [statisticsOpen, setStatisticsOpen] = useState(false);
   const [challengeOpen, setChallengeOpen] = useState(false);
+  const [selectedMode, setSelectedMode] = useState(gameMode);
   
   const challengeQuery = `?challenge=${props.challengeSum}_${props.challengeDisks}_${props.challengeColumns}_${props.challengeIncludeNegatives ? 1 : 0}_${props.challengeTargetWins}`;
   let text, query;
@@ -141,29 +142,32 @@ const MenuBar = (props) => {
     setStatisticsOpen(false);
   }
   
-  const renderMode = (value) => {
-    switch (value) {
-      case 'challenge':
-        return ( <Grade /> );
-      case 'unlimited':
-      default:
-        return ( <AllInclusive /> );
-    }
-  }
-  
   const handleChangeMode = (event) => {
-    let query = '';
-    switch (event.target.value) {
-      case "challenge":
-        setChallengeOpen(true);
-        break;
-      default:
-        window.location = window.location.origin + query;
-        break;
+    const selected = event.target.closest('.modeOption')?.getAttribute('data-value');
+    
+    if (selected) {
+      setSelectedMode(selected);
+      
+      let query = '';
+      switch (selected) {
+        case "challenge":
+          setChallengeOpen(true);
+          break;     
+        default:
+          if (gameMode !== selected) {
+            window.location = window.location.origin + query;
+          }
+          break;
+      }
     }
   }
   
   const handleCloseChallenge = () => {
+    setSelectedMode(gameMode);
+    setChallengeOpen(false);
+  }
+  
+  const handleCreateChallenge = () => {
     setChallengeOpen(false);
     window.location = window.location.origin + challengeQuery;
   }
@@ -188,13 +192,15 @@ const MenuBar = (props) => {
         
         <FormControl sx={{ width: 'calc(80px - 0.5rem)', mr: '0.5rem' }} size="small">
           <Select 
-            defaultValue={gameMode}
-            renderValue={renderMode} 
-            onChange={handleChangeMode}
+            value={selectedMode} 
+            onClose={handleChangeMode}
             sx={{
               color: "white",
               '.MuiSelect-select': {
                 display: "flex !important",
+              },
+              '.MuiSelect-select .MuiListItemText-root': {
+                display: "none !important",
               },
               '.MuiOutlinedInput-notchedOutline': {
                 border: 0,
@@ -211,13 +217,13 @@ const MenuBar = (props) => {
               }
             }}
           >
-            <MenuItem value="unlimited">
+            <MenuItem className="modeOption" value="unlimited">
               <ListItemIcon>
                 <AllInclusive />
               </ListItemIcon>
               <ListItemText>Unlimited Mode</ListItemText>
             </MenuItem>
-            <MenuItem value="challenge">
+            <MenuItem className="modeOption" value="challenge">
               <ListItemIcon>
                 <Grade />
               </ListItemIcon>
@@ -228,6 +234,7 @@ const MenuBar = (props) => {
         <ChallengeDialog
           open={challengeOpen}
           onClose={handleCloseChallenge}
+          onCreate={handleCreateChallenge}
           sum={props.challengeSum}
           setSum={props.setChallengeSum}
           numberOfDisks={props.challengeDisks}

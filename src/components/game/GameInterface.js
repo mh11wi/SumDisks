@@ -75,6 +75,7 @@ const GameInterface = forwardRef((props, ref) => {
         onRotate={debounce(onRotate, 500)}
         disabled={hasWon}
         swipeMode={useSwipe}
+        swipeContainer={".Main"}
       />
       { props.actionButton }
       <ConsecutiveSnackbars snackPack={snackPack} setSnackPack={setSnackPack} />

@@ -89,6 +89,7 @@ html, body, #root, .App, .Main {
   }
 }
 
+/* Mobile - Portrait mode */
 @media (orientation: portrait) and (max-width: 600px) {
   .Game {
     width: 95%;
@@ -103,6 +104,7 @@ html, body, #root, .App, .Main {
   }
 }
 
+/* Tablet - Portrait mode */
 @media (orientation: portrait) and (min-width: 600px) {
   .Game {
     width: 70%;
@@ -123,7 +125,8 @@ html, body, #root, .App, .Main {
   }
 }
 
-@media (orientation: landscape) and (max-width: 1200px) and (max-height: 600px) {
+/* Mobile - Landscape mode */
+@media (orientation: landscape) and (max-height: 600px) {
   .App {
     grid-template: 100% / 20% 60% 20%;
   }
@@ -146,7 +149,8 @@ html, body, #root, .App, .Main {
   }
 }
 
-@media (orientation: landscape) and (max-width: 1200px) and (min-height: 600px) {
+/* Tablet - Landscape mode */
+@media (orientation: landscape) and (min-height: 600px) and (max-width: 1200px) {
   .App {
     grid-template: 100% / 17.5% 65% 17.5%;
   }
@@ -167,14 +171,15 @@ html, body, #root, .App, .Main {
   }
 }
 
-@media (orientation: landscape) and (min-width: 1200px) {
+/* Laptop */
+@media (orientation: landscape) and (min-height: 600px) and (min-width: 1200px) and (max-width: 1536px) {
   .App {
     grid-template: 100% / 20% 60% 20%;
   }
   
   .Game {
-    padding: 1.5rem 0;
-    height: calc(100% - 6rem);
+    padding: 2rem 0;
+    height: calc(100% - 7rem);
   }
   
   .gameLabel {
@@ -192,6 +197,27 @@ html, body, #root, .App, .Main {
   .actionButton {
     bottom: 1rem;
     right: calc(20% + 1.5rem);
+  }
+}
+
+/* Large monitor or tv */
+@media (orientation: landscape) and (min-height: 600px) and (min-width: 1536px) {
+  .App {
+    grid-template: 100% / 17.5% 65% 17.5%;
+  }
+  
+  .Game {
+    padding: 4rem 0;
+    height: calc(100% - 11rem);
+  }
+  
+  .gameLabel {
+    font-size: 1.5rem;
+  }
+  
+  .actionButton {
+    bottom: 1rem;
+    right: calc(17.5% + 1.5rem);
   }
 }
 
