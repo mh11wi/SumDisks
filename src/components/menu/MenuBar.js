@@ -205,12 +205,13 @@ const MenuBar = (props) => {
               '.MuiOutlinedInput-notchedOutline': {
                 border: 0,
               },
-              '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
+              '&.Mui-focused': {
                 backgroundColor: "rgb(255, 255, 255, 0.2) !important",
                 borderRadius: "7.5px",
               },
-              '&:hover .MuiOutlinedInput-notchedOutline': {
-                backgroundColor: "rgb(0, 0, 0, 0.05)",
+              '&:hover': {
+                backgroundColor: "rgb(0, 0, 0, 0.04)",
+                borderRadius: "7.5px",
               },
               '.MuiSvgIcon-root ': {
                 fill: "white",
