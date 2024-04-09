@@ -65,13 +65,7 @@ function App() {
   const [unlimitedDisks, setUnlimitedDisks] = useState(parseInt(localStorage.getItem('sd-numberOfDisks')) || 3);
   const [unlimitedColumns, setUnlimitedColumns] = useState(parseInt(localStorage.getItem('sd-numbersPerDisk')) || 4);
   const [unlimitedIncludeNegatives, setUnlimitedIncludeNegatives] = useState(localStorage.getItem('sd-includeNegatives') === 'true');
-  const [unlimitedStats, setUnlimitedStats] = useState([
-    parseInt(localStorage.getItem('sd-unlimitedStats-3')) || 0,
-    parseInt(localStorage.getItem('sd-unlimitedStats-4')) || 0,
-    parseInt(localStorage.getItem('sd-unlimitedStats-5')) || 0,
-    parseInt(localStorage.getItem('sd-unlimitedStats-6')) || 0,
-    parseInt(localStorage.getItem('sd-unlimitedStats-7')) || 0
-  ]);
+  const [unlimitedStats, setUnlimitedStats] = useState(diskMarks.map((mark) => parseInt(localStorage.getItem(`sd-unlimitedStats-${mark.value}`)) || 0));
   
   // Challenge Mode State
   const [challengeSum, setChallengeSum] = useState(10);

@@ -48,7 +48,7 @@ const MenuBar = (props) => {
   
   switch (gameMode) {
     case 'challenge':
-      text = `How quickly can you finish ${props.challengeTargetWins} games?`;
+      text = `How quickly can you solve ${props.challengeTargetWins} puzzles?`;
       query = challengeQuery;
       break;
     case 'unlimited':

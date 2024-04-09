@@ -2,6 +2,8 @@ import { Fragment } from 'react';
 import { useTheme } from '@mui/material/styles';
 import { Typography } from '@mui/material';
 import { BarChart } from '@mui/x-charts/BarChart';
+import { getSum } from 'helpers/game';
+import { diskMarks } from 'helpers/config';
 
 
 const UnlimitedStatsTab = (props) => {
@@ -10,7 +12,7 @@ const UnlimitedStatsTab = (props) => {
   return (
     <Fragment>
       <Typography sx={{ pt: 2, pb: 1, fontWeight: 500 }}>
-        Total Games Won: { props.data.reduce((partialSum, a) => partialSum + a, 0) }
+        Total Games Won: { getSum(props.data) }
       </Typography>
       <BarChart
         xAxis={[
@@ -19,7 +21,7 @@ const UnlimitedStatsTab = (props) => {
         yAxis={[
           {
             id: 'barCategories',
-            data: ['3 Disks', '4 Disks', '5 Disks', '6 Disks', '7 Disks'],
+            data: diskMarks.map((mark) => `${mark.value} Disks`),
             scaleType: 'band'
           },
         ]}

@@ -2,6 +2,7 @@ import { useContext, useEffect, useRef, useState } from 'react';
 import NewGameButton from 'components/game/modes/unlimited/NewGameButton';
 import GameInterface from 'components/game/GameInterface';
 import { getSum } from 'helpers/game';
+import { showInterstitialAd } from 'helpers/app';
 import { unlimitedThresholds } from 'helpers/config';
 import { GameContext } from 'src/App';
 
@@ -22,22 +23,7 @@ const UnlimitedMode = (props) => {
   }, [props.firstGame, props.sum, props.numberOfDisks, props.numberOfColumns, props.includeNegatives]);
   
   const handleClickNewGame = () => {
-    window.adBreak({
-      type: 'next',
-      name: 'new-game',
-      beforeAd: () => {
-        document.querySelectorAll('.adsbygoogle[data-slotcar-interstitial="true"], .adsbygoogle[data-slotcar-interstitial="true"] *').forEach(function(el) {
-          if (CSS.supports("height: 100dvh")) {
-            el.style.width = "100dvw";
-            el.style.height = "100dvh";
-          } else { 
-            el.style.width = "100vw";
-            el.style.height = "100vh";
-          }
-        });
-      }
-    });
-    
+    showInterstitialAd();
     setPulsateButton(false);
     gameRef.current.loadNewGame(props.sum, props.numberOfDisks, props.numberOfColumns, props.includeNegatives);
   }

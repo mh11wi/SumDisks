@@ -2,6 +2,7 @@ import { useContext, useEffect, useRef, useState } from 'react';
 import { useStopwatch } from 'react-timer-hook';
 import ReplayButton from 'components/game/modes/challenge/ReplayButton';
 import GameInterface from 'components/game/GameInterface';
+import { showInterstitialAd } from 'helpers/app';
 import { challengeThresholds } from 'helpers/config';
 import { GameContext } from 'src/App';
 
@@ -36,24 +37,9 @@ const ChallengeMode = (props) => {
   }, [wins, props.sum, props.numberOfColumns, props.numberOfDisks, props.includeNegatives, props.targetWins]);
   
   const handleClickReplay = () => {
-    window.adBreak({
-      type: 'next',
-      name: 'new-game',
-      beforeAd: () => {
-        document.querySelectorAll('.adsbygoogle[data-slotcar-interstitial="true"], .adsbygoogle[data-slotcar-interstitial="true"] *').forEach(function(el) {
-          if (CSS.supports("height: 100dvh")) {
-            el.style.width = "100dvw";
-            el.style.height = "100dvh";
-          } else { 
-            el.style.width = "100vw";
-            el.style.height = "100vh";
-          }
-        });
-      },
-      afterAd: () => {
-        // Ensure timer is 00:00:00 when the ad is over
-        reset();
-      }
+    showInterstitialAd(function() {
+      // Ensure timer is 00:00:00 when the ad is over
+      reset();
     });
     
     setWins(0);
