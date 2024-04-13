@@ -30,6 +30,10 @@ import { isMobile } from 'helpers/app';
 import { GameContext } from 'src/App';
 
 
+function getChallengeQuery(sum, disks, columns, negatives, wins) {
+  return `?challenge=${sum}_${disks}_${columns}_${negatives ? 1 : 0}_${wins}`;
+}
+
 const MenuBar = (props) => {
   const calculationsRef = useRef();
   const { gameMode, disksText, timerStatus, setTimerStatus } = useContext(GameContext);
@@ -43,13 +47,11 @@ const MenuBar = (props) => {
   const [challengeOpen, setChallengeOpen] = useState(false);
   const [selectedMode, setSelectedMode] = useState(gameMode);
   
-  const challengeQuery = `?challenge=${props.challengeSum}_${props.challengeDisks}_${props.challengeColumns}_${props.challengeIncludeNegatives ? 1 : 0}_${props.challengeTargetWins}`;
-  let text, query;
-  
+  let text, query;  
   switch (gameMode) {
     case 'challenge':
       text = `How quickly can you solve ${props.challengeTargetWins} puzzles?`;
-      query = challengeQuery;
+      query = getChallengeQuery(props.challengeSum, props.challengeDisks, props.challengeColumns, props.challengeIncludeNegatives, props.challengeTargetWins);
       break;
     case 'unlimited':
       if (disksText) {
@@ -167,9 +169,10 @@ const MenuBar = (props) => {
     setChallengeOpen(false);
   }
   
-  const handleCreateChallenge = () => {
+  const handleCreateChallenge = (sum , disks, columns, negatives, wins) => {
     setChallengeOpen(false);
-    window.location = window.location.origin + challengeQuery;
+    const query = getChallengeQuery(sum, disks, columns, negatives, wins);
+    window.location = window.location.origin + query;
   }
   
   return (
@@ -237,15 +240,10 @@ const MenuBar = (props) => {
           onClose={handleCloseChallenge}
           onCreate={handleCreateChallenge}
           sum={props.challengeSum}
-          setSum={props.setChallengeSum}
           numberOfDisks={props.challengeDisks}
-          setNumberOfDisks={props.setChallengeDisks}
           numberOfColumns={props.challengeColumns}
-          setNumberOfColumns={props.setChallengeColumns}
           includeNegatives={props.challengeIncludeNegatives}
-          setIncludeNegatives={props.setChallengeIncludeNegatives}
           targetWins={props.challengeTargetWins}
-          setTargetWins={props.setChallengeTargetWins}
         />
         
         <Typography variant="h5" component="h1" align="center" sx={{ fontWeight: 500, flexGrow: 1 }}>

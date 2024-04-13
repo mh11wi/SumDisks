@@ -6,7 +6,7 @@ import { unlimitedThresholds, challengeThresholds } from 'helpers/config';
 
 const AchievementsTab = (props) => {
   const unlimitedWins = getSum(props.unlimitedStats);
-  const challengeWins = props.challengeStats;
+  const challengeWins = getSum(props.challengeStats.map((stat) => stat.count));
   
   const unlimitedAchievements = unlimitedThresholds.map((threshold) => {
     return (

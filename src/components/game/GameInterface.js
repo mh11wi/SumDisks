@@ -51,22 +51,10 @@ const GameInterface = forwardRef((props, ref) => {
   
   return (
     <Box className="Game" sx={{ position: 'relative' }}>
-      <Box 
-        className="gameLabel left" 
-        sx={{ 
-          color: props.completed ? 'success.dark' : '',
-          fontWeight: props.completed ? '500' : ''
-        }}
-      >
+      <Box className="gameLabel left">
         { props.left }
       </Box>
-      <Box 
-        className="gameLabel right" 
-        sx={{ 
-          color: props.completed ? 'success.dark' : '',
-          fontWeight: props.completed ? '500' : '' 
-        }}
-      >
+      <Box className="gameLabel right" sx={{ textAlign: 'right' }}>
         { props.right }
       </Box>
       <ReactDisks 

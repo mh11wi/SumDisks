@@ -79,8 +79,8 @@ html, body, #root, .App, .Main {
   }
   
   .gameLabel {
-    font-size: 1.25rem;
-    top: 1.5rem;
+    font-size: 1.2rem;
+    top: 1.2rem;
   }
   
   .actionButton {
@@ -96,11 +96,11 @@ html, body, #root, .App, .Main {
   }
   
   .gameLabel.left {
-    left: 0.85rem;
+    left: 0.65rem;
   }
 
   .gameLabel.right {
-    right: 0.85rem;
+    right: 0.65rem;
   }
 }
 
@@ -136,6 +136,14 @@ html, body, #root, .App, .Main {
     height: calc(100% - 4rem);
   }
   
+  .gameLabel.left {
+    left: 1.25rem;
+  }
+
+  .gameLabel.right {
+    right: 1.25rem;
+  }
+  
   .actionButton {
     width: 3rem !important;
     height: 3rem !important;
@@ -162,7 +170,6 @@ html, body, #root, .App, .Main {
   
   .gameLabel {
     font-size: 1.25rem;
-    top: 1.5rem;
   }
   
   .actionButton {
@@ -184,14 +191,6 @@ html, body, #root, .App, .Main {
   
   .gameLabel {
     font-size: 1.5rem;
-  }
-  
-  .gameLabel.left {
-    left: 2rem;
-  }
-
-  .gameLabel.right {
-    right: 2rem;
   }
   
   .actionButton {

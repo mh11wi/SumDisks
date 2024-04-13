@@ -32,6 +32,7 @@ const theme = createTheme({
     success: {
       light: green[50],
       main: green[300],
+      secondary: green[500],
       dark: green[700]
     },
   }
@@ -73,7 +74,13 @@ function App() {
   const [challengeColumns, setChallengeColumns] = useState(4);
   const [challengeIncludeNegatives, setChallengeIncludeNegatives] = useState(false);
   const [challengeTargetWins, setChallengeTargetWins] = useState(10);
-  const [challengeStats, setChallengeStats] = useState(parseInt(localStorage.getItem('sd-challengeStats')) || 0);
+  const [challengeStats, setChallengeStats] = useState(diskMarks.map((mark) => {
+    return {
+      count: parseInt(localStorage.getItem(`sd-challengeStats-${mark.value}`)) || 0,
+      average: parseFloat(localStorage.getItem(`sd-challengeAverage-${mark.value}`)) || 0,
+      best: parseFloat(localStorage.getItem(`sd-challengeBest-${mark.value}`)) || 0,
+    }
+  }));
   
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
@@ -242,15 +249,10 @@ function App() {
                 setUnlimitedIncludeNegatives={handleChangeUnlimitedIncludeNegatives}
                 unlimitedStats={unlimitedStats}
                 challengeSum={challengeSum}
-                setChallengeSum={setChallengeSum}
                 challengeDisks={challengeDisks}
-                setChallengeDisks={setChallengeDisks}
                 challengeColumns={challengeColumns}
-                setChallengeColumns={setChallengeColumns}
                 challengeIncludeNegatives={challengeIncludeNegatives}
-                setChallengeIncludeNegatives={setChallengeIncludeNegatives}
                 challengeTargetWins={challengeTargetWins}
-                setChallengeTargetWins={setChallengeTargetWins}
                 challengeStats={challengeStats}
               />
             }

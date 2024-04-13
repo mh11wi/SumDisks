@@ -11,7 +11,7 @@ const UnlimitedStatsTab = (props) => {
   
   return (
     <Fragment>
-      <Typography sx={{ pt: 2, pb: 1, fontWeight: 500 }}>
+      <Typography sx={{ pt: 2, fontWeight: 500 }}>
         Total Games Won: { getSum(props.data) }
       </Typography>
       <BarChart
@@ -24,7 +24,14 @@ const UnlimitedStatsTab = (props) => {
             data: diskMarks.map((mark) => `${mark.value} Disks`),
             scaleType: 'band'
           },
+          {
+            id: 'barValue',
+            data: diskMarks.map((mark, index) => index),
+            valueFormatter: (index) => `${props.data[index]}`,
+            scaleType: 'band'
+          }
         ]}
+        rightAxis="barValue"
         series={[
           {
             data: props.data,
@@ -45,6 +52,13 @@ const UnlimitedStatsTab = (props) => {
             itemMarkHeight: 0,
             labelStyle: { fontSize: "0.95em" }
           }
+        }}
+        margin={{ right: 60 }}
+        disableAxisListener={true}
+        sx={{
+          '.MuiChartsAxis-right .MuiChartsAxis-line': { visibility: 'hidden' },
+          '.MuiChartsAxis-right .MuiChartsAxis-tick': { visibility: 'hidden' },
+          '.MuiChartsAxis-right .MuiChartsAxis-tickLabel': { fill: theme.palette.primary.main, transform: 'translateX(5px)' }
         }}
       />
     </Fragment>

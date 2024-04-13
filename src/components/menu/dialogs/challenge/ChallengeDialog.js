@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import {
   Box,
   Button, 
@@ -14,24 +15,35 @@ import { diskMarks, columnMarks, sumMarks, winMarks } from 'helpers/config';
 
 
 const ChallengeDialog = (props) => {
+  // State of dialog settings, only persisting to props on submit
+  const [challengeSum, setChallengeSum] = useState(props.sum);
+  const [challengeDisks, setChallengeDisks] = useState(props.numberOfDisks);
+  const [challengeColumns, setChallengeColumns] = useState(props.numberOfColumns);
+  const [challengeIncludeNegatives, setChallengeIncludeNegatives] = useState(props.includeNegatives);
+  const [challengeTargetWins, setChallengeTargetWins] = useState(props.targetWins);
+  
   const onWinsChange = (event, newValue) => {
-    props.setTargetWins(newValue);
+    setChallengeTargetWins(newValue);
   }
   
   const onSumChange = (event, newValue) => {
-    props.setSum(newValue);
+    setChallengeSum(newValue);
   }
   
   const onDisksChange = (event, newValue) => {
-    props.setNumberOfDisks(newValue);
+    setChallengeDisks(newValue);
   }
   
   const onColumnsChange = (event, newValue) => {
-    props.setNumberOfColumns(newValue);
+    setChallengeColumns(newValue);
   }
   
   const onNegativesChange = (event, newValue) => {
-    props.setIncludeNegatives(newValue);
+    setChallengeIncludeNegatives(newValue);
+  }
+  
+  const handleClickCreate = () => {
+    props.onCreate(challengeSum, challengeDisks, challengeColumns, challengeIncludeNegatives, challengeTargetWins);
   }
   
   return (
@@ -51,7 +63,7 @@ const ChallengeDialog = (props) => {
           </Typography>
           <Slider 
             aria-labelledby="wins-slider"
-            value={props.targetWins}
+            value={challengeTargetWins}
             onChangeCommitted={onWinsChange}
             step={null}
             min={winMarks[0].value}
@@ -70,7 +82,7 @@ const ChallengeDialog = (props) => {
           </Typography>
           <Slider 
             aria-labelledby="sum-slider"
-            value={props.sum}
+            value={challengeSum}
             onChangeCommitted={onSumChange}
             step={null}
             min={sumMarks[0].value}
@@ -85,7 +97,7 @@ const ChallengeDialog = (props) => {
           </Typography>
           <Slider 
             aria-labelledby="disks-slider"
-            value={props.numberOfDisks}
+            value={challengeDisks}
             onChangeCommitted={onDisksChange}
             step={null}
             min={diskMarks[0].value}
@@ -100,7 +112,7 @@ const ChallengeDialog = (props) => {
           </Typography>
           <Slider 
             aria-labelledby="columns-slider"
-            value={props.numberOfColumns}
+            value={challengeColumns}
             onChangeCommitted={onColumnsChange}
             step={null}
             min={columnMarks[0].value}
@@ -115,13 +127,13 @@ const ChallengeDialog = (props) => {
           </Typography>
           <Switch
             inputProps={{ 'aria-labelledby': 'negatives-switch' }}
-            checked={props.includeNegatives}
+            checked={challengeIncludeNegatives}
             onChange={onNegativesChange}
           />
         </DialogContentText>
       </DialogContent>
       <DialogActions>
-        <Button onClick={props.onCreate}>Create</Button>
+        <Button onClick={handleClickCreate}>Create</Button>
       </DialogActions>
     </Dialog>
   );

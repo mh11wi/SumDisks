@@ -10,6 +10,7 @@ import {
   Tabs
 } from '@mui/material';
 import UnlimitedStatsTab from 'components/menu/dialogs/statistics/UnlimitedStatsTab';
+import ChallengeStatsTab from 'components/menu/dialogs/statistics/ChallengeStatsTab';
 import AchievementsTab from 'components/menu/dialogs/statistics/AchievementsTab';
 
 
@@ -54,6 +55,7 @@ const StatisticsDialog = (props) => {
         <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
           <Tabs value={value} onChange={handleChange} aria-label="dialog tabs">
             <Tab label="Unlimited" sx={{ fontSize: '0.75em' }} />
+            <Tab label="Challenge" sx={{ fontSize: '0.75em' }} />
             <Tab label="Achievements" sx={{ fontSize: '0.75em' }} />
           </Tabs>
         </Box>
@@ -63,6 +65,10 @@ const StatisticsDialog = (props) => {
         </TabPanel>
         
         <TabPanel value={value} index={1}>
+          <ChallengeStatsTab data={props.challengeStats} />
+        </TabPanel>
+        
+        <TabPanel value={value} index={2}>
           <AchievementsTab unlimitedStats={props.unlimitedStats} challengeStats={props.challengeStats} />
         </TabPanel>
       </DialogContent>
