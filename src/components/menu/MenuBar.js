@@ -158,6 +158,9 @@ const MenuBar = (props) => {
         default:
           if (gameMode !== selected) {
             window.location = window.location.origin + window.location.pathname + query;
+            setTimeout(function() {
+              setSelectedMode(gameMode);
+            }, 500);
           }
           break;
       }
@@ -170,11 +173,12 @@ const MenuBar = (props) => {
   }
   
   const handleCreateChallenge = (sum , disks, columns, negatives, wins) => {
+    setChallengeOpen(false);
     const query = getChallengeQuery(sum, disks, columns, negatives, wins);
     window.location = window.location.origin + window.location.pathname + query;
     setTimeout(function() {
-      handleCloseChallenge();
-    }, 1000);
+      setSelectedMode(gameMode);
+    }, 500);
   }
   
   return (
