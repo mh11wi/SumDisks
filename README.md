@@ -14,9 +14,9 @@ The following settings are configurable in the game:
 
 - sum of numbers
 
-- numbers per disk
-
 - number of disks
+
+- number of columns
 
 - whether negative numbers should be included
 

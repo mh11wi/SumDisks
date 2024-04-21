@@ -170,9 +170,11 @@ const MenuBar = (props) => {
   }
   
   const handleCreateChallenge = (sum , disks, columns, negatives, wins) => {
-    setChallengeOpen(false);
     const query = getChallengeQuery(sum, disks, columns, negatives, wins);
     window.location = window.location.origin + window.location.pathname + query;
+    setTimeout(function() {
+      handleCloseChallenge();
+    }, 1000);
   }
   
   return (
