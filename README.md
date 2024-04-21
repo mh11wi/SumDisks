@@ -3,7 +3,7 @@ A number game using the `react-disks` package.
 
 
 ## How To Play?
-Rotate the disks so that every column of numbers adds up to the specified sum (default 100).
+Rotate the disks so that every column of numbers adds up to the specified sum (default 10).
 
 You can rotate a disk by clicking on it, and then clicking either the clockwise or counterclockwise arrows that appear.
 
