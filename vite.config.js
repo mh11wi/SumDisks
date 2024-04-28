@@ -23,6 +23,11 @@ export default defineConfig({
     globals: true,
     environment: 'jsdom',
     setupFiles: './tests/setup.js',
+    server: {
+      deps: {
+        inline: true,
+      },
+    }
   },
   optimizeDeps: {
     force: true,
