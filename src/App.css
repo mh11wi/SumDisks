@@ -1,6 +1,12 @@
 html {
   transform: scale(1.0);
   transform-origin: 0 0;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+html::-webkit-scrollbar { 
+  display: none;
 }
 
 html, body, #root, #party-js-container, .App {
