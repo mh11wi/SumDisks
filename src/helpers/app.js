@@ -22,17 +22,14 @@ export function showInterstitialAd(afterAdCallback) {
     name: 'new-game',
     beforeAd: () => {
       const scale = getPageScale();
-      document.querySelectorAll('.adsbygoogle[data-slotcar-interstitial="true"]').forEach(function(el) {
+      document.querySelectorAll('.adsbygoogle[data-slotcar-interstitial="true"], .adsbygoogle[data-slotcar-interstitial="true"] *').forEach(function(el) {
         if (CSS.supports("height: 100dvh")) {
-          el.style.width = '100dvw';
-          el.style.height = '100dvh';
+          el.style.width = `${(100 / scale).toFixed(3)}dvw`;
+          el.style.height = `${(100 / scale).toFixed(3)}dvh`;
         } else { 
-          el.style.width = '100vw';
-          el.style.height = '100vh';
+          el.style.width = `${(100 / scale).toFixed(3)}vw`;
+          el.style.height = `${(100 / scale).toFixed(3)}vh`;
         }
-        
-        el.style.transform = `scale(${(1 / scale).toFixed(5)})`;
-        el.style.transformOrigin = '0 0';
       });
     },
     afterAd: () => {
