@@ -7,7 +7,7 @@ import MenuBar from 'components/menu/MenuBar';
 import UnlimitedMode from 'components/game/modes/unlimited/UnlimitedMode';
 import ChallengeMode from 'components/game/modes/challenge/ChallengeMode';
 import useWindowOrientation from 'hooks/useWindowOrientation';
-import { isTouchDevice } from 'helpers/app';
+import { isTouchDevice, getPageScale } from 'helpers/app';
 import { getSum } from 'helpers/game';
 import { diskMarks, columnMarks, sumMarks } from 'helpers/config';
 import '@fontsource/roboto/300.css';
@@ -302,7 +302,7 @@ function App() {
               slot="2074941876"
               style={adStyle}
               format=""
-              responsive="true"
+              responsive={getPageScale() == 1}
             />
           </Box>
         }

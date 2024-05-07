@@ -5,7 +5,7 @@ import party from 'party-js';
 import ReactDisks from 'react-disks';
 import ConsecutiveSnackbars from 'components/game/ConsecutiveSnackbars';
 import { GameContext } from 'src/App';
-import { debounce } from 'helpers/app';
+import { debounce, getPageScale } from 'helpers/app';
 import { isSolved, newGame } from 'helpers/game';
 
 
@@ -17,9 +17,12 @@ const GameInterface = forwardRef((props, ref) => {
   
   useEffect(() => {
     if (hasWon) {
+      const scale = getPageScale();
       const element = document.querySelector('.DisksContainer');
+
       party.confetti(element, {
         count: party.variation.range(50, 70),
+        size: party.variation.skew(1.0 * scale, 0.2 * scale)
       });
       props.handleWin();
     }
