@@ -20,7 +20,16 @@ const ChallengeDialog = (props) => {
   const [challengeDisks, setChallengeDisks] = useState(props.numberOfDisks);
   const [challengeColumns, setChallengeColumns] = useState(props.numberOfColumns);
   const [challengeIncludeNegatives, setChallengeIncludeNegatives] = useState(props.includeNegatives);
-  const [challengeTargetWins, setChallengeTargetWins] = useState(props.targetWins);
+  const [challengeTargetWins, setChallengeTargetWins] = useState(winMarks.map((mark) => mark.value).indexOf(props.targetWins));
+  
+  const scaledWinValue = (index) => {
+    return winMarks[index].value;
+  }
+  
+  const scaledWinMarks = winMarks.map((mark, index) => ({
+    value: index,
+    label: scaledWinValue(index)
+  }));
   
   const onWinsChange = (event, newValue) => {
     setChallengeTargetWins(newValue);
@@ -43,7 +52,7 @@ const ChallengeDialog = (props) => {
   }
   
   const handleClickCreate = () => {
-    props.onCreate(challengeSum, challengeDisks, challengeColumns, challengeIncludeNegatives, challengeTargetWins);
+    props.onCreate(challengeSum, challengeDisks, challengeColumns, challengeIncludeNegatives, scaledWinValue(challengeTargetWins));
   }
   
   return (
@@ -66,9 +75,10 @@ const ChallengeDialog = (props) => {
             value={challengeTargetWins}
             onChangeCommitted={onWinsChange}
             step={null}
-            min={winMarks[0].value}
-            max={winMarks[winMarks.length - 1].value}
-            marks={winMarks}
+            min={scaledWinMarks[0].value}
+            max={scaledWinMarks[scaledWinMarks.length - 1].value}
+            marks={scaledWinMarks}
+            scale={scaledWinValue}
           />
         </DialogContentText>
         
