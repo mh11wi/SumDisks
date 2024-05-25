@@ -16,7 +16,7 @@ import { diskMarks, columnMarks, sumMarks, winMarks } from 'helpers/config';
 
 const ChallengeDialog = (props) => {
   // State of dialog settings, only persisting to props on submit
-  const [challengeSum, setChallengeSum] = useState(props.sum);
+  const [challengeSum, setChallengeSum] = useState(sumMarks.map((mark) => mark.value).indexOf(props.sum));
   const [challengeDisks, setChallengeDisks] = useState(props.numberOfDisks);
   const [challengeColumns, setChallengeColumns] = useState(props.numberOfColumns);
   const [challengeIncludeNegatives, setChallengeIncludeNegatives] = useState(props.includeNegatives);
@@ -35,6 +35,15 @@ const ChallengeDialog = (props) => {
     setChallengeTargetWins(newValue);
   }
   
+  const scaledSumValue = (index) => {
+    return sumMarks[index].value;
+  }
+  
+  const scaledSumMarks = sumMarks.map((mark, index) => ({
+    value: index,
+    label: scaledSumValue(index)
+  }));
+  
   const onSumChange = (event, newValue) => {
     setChallengeSum(newValue);
   }
@@ -52,7 +61,7 @@ const ChallengeDialog = (props) => {
   }
   
   const handleClickCreate = () => {
-    props.onCreate(challengeSum, challengeDisks, challengeColumns, challengeIncludeNegatives, scaledWinValue(challengeTargetWins));
+    props.onCreate(scaledSumValue(challengeSum), challengeDisks, challengeColumns, challengeIncludeNegatives, scaledWinValue(challengeTargetWins));
   }
   
   return (
@@ -95,9 +104,9 @@ const ChallengeDialog = (props) => {
             value={challengeSum}
             onChangeCommitted={onSumChange}
             step={null}
-            min={sumMarks[0].value}
-            max={sumMarks[sumMarks.length - 1].value}
-            marks={sumMarks}
+            min={scaledSumMarks[0].value}
+            max={scaledSumMarks[scaledSumMarks.length - 1].value}
+            marks={scaledSumMarks}
           />
         </DialogContentText>
         

@@ -1,4 +1,4 @@
-import { useContext } from 'react';
+import { useContext, useState } from 'react';
 import {
   Button, 
   Dialog, 
@@ -17,9 +17,22 @@ import { GameContext } from 'src/App';
 
 const SettingsDialog = (props) => {
   const { gameMode, useSwipe, handleChangeUseSwipe } = useContext(GameContext);
+  const [scaledSum, setScaledSum] = useState(sumMarks.map((mark) => mark.value).indexOf(props.sum));
+  
+  const scaledSumValue = (index) => {
+    return sumMarks[index].value;
+  }
+  
+  const scaledSumMarks = sumMarks.map((mark, index) => ({
+    value: index,
+    label: scaledSumValue(index)
+  }));
   
   const onSumChange = (event, newValue) => {
-    props.setSum(newValue);
+    setScaledSum(newValue);
+    
+    const newSum = scaledSumValue(newValue);
+    props.setSum(newSum);
   }
   
   const onDisksChange = (event, newValue) => {
@@ -56,12 +69,12 @@ const SettingsDialog = (props) => {
             </Typography>
             <Slider 
               aria-labelledby="sum-slider"
-              value={props.sum}
+              value={scaledSum}
               onChangeCommitted={onSumChange}
               step={null}
-              min={sumMarks[0].value}
-              max={sumMarks[sumMarks.length - 1].value}
-              marks={sumMarks}
+              min={scaledSumMarks[0].value}
+              max={scaledSumMarks[scaledSumMarks.length - 1].value}
+              marks={scaledSumMarks}
             />
           </DialogContentText>
         }
