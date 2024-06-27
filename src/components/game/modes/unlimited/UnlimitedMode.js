@@ -9,7 +9,7 @@ import { GameContext } from 'src/App';
 
 const UnlimitedMode = (props) => {
   const gameRef = useRef();
-  const { disksText, setDisksText, setRotatedDisksText } = useContext(GameContext);
+  const { disksText, setDisksText, setRotatedDisksText, showAds } = useContext(GameContext);
   const [pulsateButton, setPulsateButton] = useState(false);
   
   useEffect(() => {
@@ -23,7 +23,10 @@ const UnlimitedMode = (props) => {
   }, [props.firstGame, props.sum, props.numberOfDisks, props.numberOfColumns, props.includeNegatives]);
   
   const handleClickNewGame = () => {
-    showInterstitialAd();
+    if (showAds) {
+      showInterstitialAd();
+    }
+    
     setPulsateButton(false);
     gameRef.current.loadNewGame(props.sum, props.numberOfDisks, props.numberOfColumns, props.includeNegatives);
   }

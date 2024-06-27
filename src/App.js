@@ -59,6 +59,7 @@ function App() {
     localStorage.getItem('sd-useSwipeMode') ? localStorage.getItem('sd-useSwipeMode') === 'true' : isTouchDevice()
   );
   const [timerStatus, setTimerStatus] = useState(null);
+  const [showAds, setShowAds] = useState(false);
   
   // Unlimited Mode State
   const [urlGame, setUrlGame] = useState(null);
@@ -83,6 +84,9 @@ function App() {
   }));
   
   useEffect(() => {
+    window.adConfig({preloadAdBreaks: 'on'});
+    setTimeout(function() { setShowAds(true) }, 120000);
+    
     const params = new URLSearchParams(window.location.search);
     
     try {
@@ -170,7 +174,6 @@ function App() {
           setChallengeColumns(numberOfColumns);
           setChallengeIncludeNegatives(urlIncludeNegatives === 1);
           setChallengeTargetWins(numberOfWins);
-          window.adConfig({preloadAdBreaks: 'on'});
         
         } else {
           // Load unlimited mode otherwise
@@ -234,7 +237,8 @@ function App() {
               useSwipe, 
               handleChangeUseSwipe,
               timerStatus,
-              setTimerStatus
+              setTimerStatus,
+              showAds
             }}
           >
             {gameMode && 

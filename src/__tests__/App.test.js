@@ -1,6 +1,8 @@
 import { render, screen, fireEvent } from '@testing-library/react';
 import App from 'src/App';
 
+window.adConfig = vi.fn();
+
 test('The help menu displays on load', () => {
   render(<App />);
   const dialog = screen.getByRole('dialog', { name: /How To Play/i });
