@@ -1,5 +1,5 @@
-import { createContext, useEffect, useState } from 'react';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { createContext, useEffect, useMemo, useState } from 'react';
+import { ThemeProvider, createTheme, useTheme } from '@mui/material/styles';
 import { green, grey, pink } from '@mui/material/colors';
 import Box from '@mui/material/Box';
 import AdSense from 'react-adsense';
@@ -17,27 +17,6 @@ import '@fontsource/roboto/700.css';
 import 'src/App.css';
 
 
-const theme = createTheme({
-  palette: {
-    primary: {
-      light: pink[100],
-      main: pink[500],
-      dark: pink[800]
-    },
-    secondary: {
-      light: grey[50],
-      main: grey[300],
-      dark: grey[700]
-    },
-    success: {
-      light: green[50],
-      main: green[300],
-      secondary: green[500],
-      dark: green[700]
-    },
-  }
-});
-
 const adStyle = {
   display: 'block',
   width: 'calc(100% - 1rem)',
@@ -46,8 +25,10 @@ const adStyle = {
 };
 
 export const GameContext = createContext();
+export const ColorModeContext = createContext({ toggleColorMode: () => {} });
 
-function App() {
+function SumDisks() {
+  const theme = useTheme();
   const { orientation, resizing } = useWindowOrientation();
   
   // Game Context State
@@ -211,107 +192,148 @@ function App() {
   }
   
   return (
-    <div className="App">
-      <ThemeProvider theme={theme}>
-        {orientation === 'landscape' && !resizing && 
-          <Box className="vertical-ad-left">
-            <AdSense.Google
-              client="ca-pub-9808989635264198"
-              slot="9091776362"
-              style={adStyle}
-              format=""
-              responsive="true"
-            />
-          </Box>
-        }
-        <Box role="main" className="Main">
-          <GameContext.Provider 
-            value={{
-              gameMode,
-              targetSum,
-              setTargetSum,
-              disksText, 
-              setDisksText, 
-              rotatedDisksText, 
-              setRotatedDisksText, 
-              useSwipe, 
-              handleChangeUseSwipe,
-              timerStatus,
-              setTimerStatus,
-              showAds
-            }}
-          >
-            {gameMode && 
-              <MenuBar 
-                unlimitedSum={unlimitedSum}
-                setUnlimitedSum={handleChangeUnlimitedSum}
-                unlimitedDisks={unlimitedDisks}
-                setUnlimitedDisks={handleChangeUnlimitedDisks}
-                unlimitedColumns={unlimitedColumns}
-                setUnlimitedColumns={handleChangeUnlimitedColumns}
-                unlimitedIncludeNegatives={unlimitedIncludeNegatives}
-                setUnlimitedIncludeNegatives={handleChangeUnlimitedIncludeNegatives}
-                unlimitedStats={unlimitedStats}
-                challengeSum={challengeSum}
-                challengeDisks={challengeDisks}
-                challengeColumns={challengeColumns}
-                challengeIncludeNegatives={challengeIncludeNegatives}
-                challengeTargetWins={challengeTargetWins}
-                challengeStats={challengeStats}
-              />
-            }
-              
-            {gameMode === 'unlimited' &&
-              <UnlimitedMode
-                firstGame={urlGame}
-                stats={unlimitedStats}
-                setStats={setUnlimitedStats}
-                sum={unlimitedSum}
-                numberOfDisks={unlimitedDisks}
-                numberOfColumns={unlimitedColumns}
-                includeNegatives={unlimitedIncludeNegatives}
-                buttonTransition={!resizing}
-              />
-            }
-            
-            {gameMode === 'challenge' && 
-              <ChallengeMode 
-                stats={challengeStats}
-                setStats={setChallengeStats}
-                sum={challengeSum}
-                numberOfDisks={challengeDisks}
-                numberOfColumns={challengeColumns}
-                includeNegatives={challengeIncludeNegatives}
-                targetWins={challengeTargetWins}
-                buttonTransition={!resizing}
-              />
-            }
-          </GameContext.Provider>
+    <Box className="App" sx={{ bgcolor: theme.palette.background.default, boxShadow: `inset 10000px 10000px ${theme.palette.action.hover}` }}>
+      {orientation === 'landscape' && !resizing && 
+        <Box className="vertical-ad-left">
+          <AdSense.Google
+            client="ca-pub-9808989635264198"
+            slot="9091776362"
+            style={adStyle}
+            format=""
+            responsive="true"
+          />
         </Box>
-        {orientation === 'landscape' && !resizing && 
-          <Box className="vertical-ad-right">
-            <AdSense.Google
-              client="ca-pub-9808989635264198"
-              slot="6465613026"
-              style={adStyle}
-              format=""
-              responsive="true"
+      }
+      <Box role="main" className="Main" sx={{ bgcolor: theme.palette.background.default }}>
+        <GameContext.Provider 
+          value={{
+            gameMode,
+            targetSum,
+            setTargetSum,
+            disksText, 
+            setDisksText, 
+            rotatedDisksText, 
+            setRotatedDisksText, 
+            useSwipe, 
+            handleChangeUseSwipe,
+            timerStatus,
+            setTimerStatus,
+            showAds
+          }}
+        >
+          {gameMode && 
+            <MenuBar 
+              unlimitedSum={unlimitedSum}
+              setUnlimitedSum={handleChangeUnlimitedSum}
+              unlimitedDisks={unlimitedDisks}
+              setUnlimitedDisks={handleChangeUnlimitedDisks}
+              unlimitedColumns={unlimitedColumns}
+              setUnlimitedColumns={handleChangeUnlimitedColumns}
+              unlimitedIncludeNegatives={unlimitedIncludeNegatives}
+              setUnlimitedIncludeNegatives={handleChangeUnlimitedIncludeNegatives}
+              unlimitedStats={unlimitedStats}
+              challengeSum={challengeSum}
+              challengeDisks={challengeDisks}
+              challengeColumns={challengeColumns}
+              challengeIncludeNegatives={challengeIncludeNegatives}
+              challengeTargetWins={challengeTargetWins}
+              challengeStats={challengeStats}
             />
-          </Box>
-        }
-        {orientation === 'portrait' && !resizing && 
-          <Box className="horizontal-ad">
-            <AdSense.Google
-              client="ca-pub-9808989635264198"
-              slot="2074941876"
-              style={adStyle}
-              format=""
-              responsive={getPageScale() == 1}
+          }
+            
+          {gameMode === 'unlimited' &&
+            <UnlimitedMode
+              firstGame={urlGame}
+              stats={unlimitedStats}
+              setStats={setUnlimitedStats}
+              sum={unlimitedSum}
+              numberOfDisks={unlimitedDisks}
+              numberOfColumns={unlimitedColumns}
+              includeNegatives={unlimitedIncludeNegatives}
+              buttonTransition={!resizing}
             />
-          </Box>
-        }
+          }
+          
+          {gameMode === 'challenge' && 
+            <ChallengeMode 
+              stats={challengeStats}
+              setStats={setChallengeStats}
+              sum={challengeSum}
+              numberOfDisks={challengeDisks}
+              numberOfColumns={challengeColumns}
+              includeNegatives={challengeIncludeNegatives}
+              targetWins={challengeTargetWins}
+              buttonTransition={!resizing}
+            />
+          }
+        </GameContext.Provider>
+      </Box>
+      {orientation === 'landscape' && !resizing && 
+        <Box className="vertical-ad-right">
+          <AdSense.Google
+            client="ca-pub-9808989635264198"
+            slot="6465613026"
+            style={adStyle}
+            format=""
+            responsive="true"
+          />
+        </Box>
+      }
+      {orientation === 'portrait' && !resizing && 
+        <Box className="horizontal-ad">
+          <AdSense.Google
+            client="ca-pub-9808989635264198"
+            slot="2074941876"
+            style={adStyle}
+            format=""
+            responsive={getPageScale() == 1}
+          />
+        </Box>
+      }
+    </Box>
+  );
+}
+
+function App() {
+  const [mode, setMode] = useState(localStorage.getItem('sd-colorMode') || 'light');
+  const colorMode = useMemo(() => ({
+    toggleColorMode: () => {
+      setMode((prevMode) => (prevMode === 'light' ? 'dark' : 'light'));
+    },
+  }), []);
+
+  const theme = useMemo(() => createTheme({
+    palette: {
+      mode,
+      primary: {
+        light: pink[100],
+        main: pink[500],
+        dark: pink[800]
+      },
+      secondary: {
+        light: grey[50],
+        main: grey[300],
+        dark: grey[600]
+      },
+      success: {
+        light: green[50],
+        main: green[300],
+        secondary: green[500],
+        dark: green[700]
+      }
+    },
+  }), [mode]);
+  
+  useEffect(() => {
+    localStorage.setItem('sd-colorMode', mode);
+  }, [mode]);
+
+  return (
+    <ColorModeContext.Provider value={colorMode}>
+      <ThemeProvider theme={theme}>
+        <SumDisks />
       </ThemeProvider>
-    </div>
+    </ColorModeContext.Provider>
   );
 }
 

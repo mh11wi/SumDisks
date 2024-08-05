@@ -182,7 +182,7 @@ const MenuBar = (props) => {
   }
   
   return (
-    <AppBar position="relative">
+    <AppBar position="relative" enableColorOnDark>
       <Toolbar variant="dense">
         <IconButton aria-label="Menu" onClick={handleClickMenu} color="inherit">
           <Menu />

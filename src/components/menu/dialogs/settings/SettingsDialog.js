@@ -1,4 +1,5 @@
 import { useContext, useState } from 'react';
+import { useTheme } from '@mui/material/styles';
 import {
   Button, 
   Dialog, 
@@ -12,11 +13,13 @@ import {
 } from '@mui/material';
 import { isTouchDevice } from 'helpers/app';
 import { diskMarks, columnMarks, sumMarks } from 'helpers/config';
-import { GameContext } from 'src/App';
+import { GameContext, ColorModeContext } from 'src/App';
 
 
 const SettingsDialog = (props) => {
+  const theme = useTheme();
   const { gameMode, useSwipe, handleChangeUseSwipe } = useContext(GameContext);
+  const colorMode = useContext(ColorModeContext);
   const [scaledSum, setScaledSum] = useState(sumMarks.map((mark) => mark.value).indexOf(props.sum));
   
   const scaledSumValue = (index) => {
@@ -49,6 +52,10 @@ const SettingsDialog = (props) => {
   
   const onSwipeChange = (event, newValue) => {
     handleChangeUseSwipe(newValue);
+  }
+  
+  const onDarkThemeChange = (event, newValue) => {
+    colorMode.toggleColorMode(newValue ? 'dark' : 'light');
   }
   
   return (
@@ -126,8 +133,19 @@ const SettingsDialog = (props) => {
           </DialogContentText>
         }
         
+        <DialogContentText component="div" sx={{ pt: gameMode === 'unlimited' ? 2 : 0 }}>
+          <Typography id="dark-theme-switch">
+            Dark theme
+          </Typography>
+          <Switch
+            inputProps={{ 'aria-labelledby': 'dark-theme-switch' }}
+            checked={theme.palette.mode === 'dark'}
+            onChange={onDarkThemeChange}
+          />
+        </DialogContentText>
+        
         {isTouchDevice() && 
-          <DialogContentText component="div" sx={{ pt: gameMode === 'unlimited' ? 2 : 0 }}>
+          <DialogContentText component="div" sx={{ pt: 2 }}>
             <Typography id="swipe-mode-switch">
               Swipe to rotate
             </Typography>
@@ -136,12 +154,6 @@ const SettingsDialog = (props) => {
               checked={useSwipe}
               onChange={onSwipeChange}
             />
-          </DialogContentText>
-        }
-        
-        {gameMode !== 'unlimited' && !isTouchDevice() &&
-          <DialogContentText component="div">
-            Stay tuned for future settings of this game mode.
           </DialogContentText>
         }
       </DialogContent>

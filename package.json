@@ -42,7 +42,7 @@
     "test": "vitest",
     "preview": "vite preview --host --port 3000",
     "predeploy": "npm run build",
-    "deploy": "gh-pages -d dist",
+    "deploy": "gh-pages -d dist --nojekyll",
     "lint": "eslint --ext .js,.jsx ."
   }
 }

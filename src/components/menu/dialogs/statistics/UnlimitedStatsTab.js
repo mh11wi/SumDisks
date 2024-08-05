@@ -35,7 +35,7 @@ const UnlimitedStatsTab = (props) => {
         series={[
           {
             data: props.data,
-            color: theme.palette.primary.light,
+            color: theme.palette.mode === 'dark' ? theme.palette.primary.main : theme.palette.primary.light,
             label: 'Win Distribution'
           },
         ]}
@@ -58,7 +58,10 @@ const UnlimitedStatsTab = (props) => {
         sx={{
           '.MuiChartsAxis-right .MuiChartsAxis-line': { visibility: 'hidden' },
           '.MuiChartsAxis-right .MuiChartsAxis-tick': { visibility: 'hidden' },
-          '.MuiChartsAxis-right .MuiChartsAxis-tickLabel': { fill: theme.palette.primary.main, transform: 'translateX(5px)' }
+          '.MuiChartsAxis-right .MuiChartsAxis-tickLabel': { 
+            fill: theme.palette.mode === 'dark' ? theme.palette.primary.light : theme.palette.primary.main,  
+            transform: 'translateX(5px)' 
+           }
         }}
       />
     </Fragment>

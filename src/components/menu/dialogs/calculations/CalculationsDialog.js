@@ -54,7 +54,7 @@ const CalculationsDialog = forwardRef((props, ref) => {
         {data &&
           <TableContainer component={Paper}>
             <Table aria-label="Table of Sums" align="center">
-              <TableHead sx={{ backgroundColor: theme.palette.action.hover }}>
+              <TableHead sx={{ bgcolor: theme.palette.action.hover }}>
                 <TableRow>
                   <TableCell>Column</TableCell>
                   <TableCell align="center">Calculation</TableCell>
@@ -77,8 +77,8 @@ const CalculationsDialog = forwardRef((props, ref) => {
                       key={index}
                       sx={{
                         '&:last-child td, &:last-child th': { border: 0 },
-                        backgroundColor: targetSum === row.sum ? theme.palette.success.light : 'inherit',
-                        td: { color: targetSum === row.sum ? theme.palette.success.dark : 'inherit' }
+                        bgcolor: targetSum === row.sum ? (theme.palette.mode === 'dark' ? theme.palette.success.dark : theme.palette.success.light) : 'inherit',
+                        td: { color: targetSum === row.sum ? (theme.palette.mode === 'dark' ? theme.palette.success.light : theme.palette.success.dark) : 'inherit' }
                       }}
                     >
                       <TableCell>{index + 1}</TableCell>

@@ -110,7 +110,7 @@ const ChallengeMode = (props) => {
   const Left = () => {
     return (
       <Box>
-        <Box sx={{ color: completed ? 'success.dark' : '', fontWeight: completed ? '500' : '' }}>
+        <Box sx={{ color: completed ? 'success.dark' : 'text.primary', fontWeight: completed ? '500' : '' }}>
           {hours < 10 ? '0' + hours : hours}:{minutes < 10 ? '0' + minutes : minutes}:{seconds < 10 ? '0' + seconds : seconds}
         </Box>
         {completed &&
@@ -123,7 +123,7 @@ const ChallengeMode = (props) => {
   const Right = () => {
     return (
       <Box>
-        <Box sx={{ color: completed ? 'success.dark' : '', fontWeight: completed ? '500' : '' }}>
+        <Box sx={{ color: completed ? 'success.dark' : 'text.primary', fontWeight: completed ? '500' : '' }}>
           Wins: {wins}
         </Box>
         {showPersonalBest &&

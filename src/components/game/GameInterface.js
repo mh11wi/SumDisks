@@ -22,7 +22,8 @@ const GameInterface = forwardRef((props, ref) => {
 
       party.confetti(element, {
         count: party.variation.range(50, 70),
-        size: party.variation.skew(1.0 * scale, 0.2 * scale)
+        size: party.variation.skew(1.0 * scale, 0.2 * scale),
+        color: () => party.Color.fromHsl(party.random.randomRange(0, 360), 100, theme.palette.mode === 'dark' ? 50 : 70)
       });
       props.handleWin();
     }
@@ -67,6 +68,7 @@ const GameInterface = forwardRef((props, ref) => {
         disabled={hasWon}
         swipeMode={useSwipe}
         swipeContainer={".Main"}
+        darkMode={theme.palette.mode === 'dark'}
       />
       { props.actionButton }
       <ConsecutiveSnackbars snackPack={snackPack} setSnackPack={setSnackPack} />
