@@ -21,3 +21,5 @@ The following settings are configurable in the game:
 - whether negative numbers should be included
 
 - on mobile touch devices, whether disks can be rotated via swipe gestures instead
+
+- dark or light theme
