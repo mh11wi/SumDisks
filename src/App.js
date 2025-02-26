@@ -1,6 +1,7 @@
 import { createContext, useEffect, useMemo, useState } from 'react';
 import { ThemeProvider, createTheme, useTheme } from '@mui/material/styles';
 import { green, grey, pink } from '@mui/material/colors';
+import useMediaQuery from '@mui/material/useMediaQuery';
 import Box from '@mui/material/Box';
 import AdSense from 'react-adsense';
 import MenuBar from 'components/menu/MenuBar';
@@ -295,7 +296,8 @@ function SumDisks() {
 }
 
 function App() {
-  const [mode, setMode] = useState(localStorage.getItem('sd-colorMode') || 'light');
+  const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)');
+  const [mode, setMode] = useState(localStorage.getItem('sd-colorMode') || (prefersDarkMode ? 'dark' : 'light'));
   const colorMode = useMemo(() => ({
     toggleColorMode: () => {
       setMode((prevMode) => (prevMode === 'light' ? 'dark' : 'light'));
@@ -325,6 +327,7 @@ function App() {
   }), [mode]);
   
   useEffect(() => {
+	document.body.style.backgroundColor = theme.palette.background.default;
     localStorage.setItem('sd-colorMode', mode);
   }, [mode]);
 
